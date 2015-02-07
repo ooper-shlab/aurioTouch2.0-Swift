@@ -1,0 +1,445 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2B40B59418873E0600F4A921 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B40B59318873E0600F4A921 /* Default-568h@2x.png */; };
+		2B71304718EB80A800DA9374 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B71304618EB80A800DA9374 /* AVFoundation.framework */; };
+		2B86B2B218F35C2300347397 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B86B2B018F35C2300347397 /* MainWindow.xib */; };
+		8250CD57145B602D00806437 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8250CD56145B602D00806437 /* Accelerate.framework */; };
+		A15CFB1D0DE4A8C600FB5D08 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A15CFB1C0DE4A8C600FB5D08 /* icon.png */; };
+		A16C47120DE37F9E00F4A0B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */; };
+		A16C473F0DE3801700F4A0B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */; };
+		A16C48360DE389CB00F4A0B3 /* oscilloscope.png in Resources */ = {isa = PBXBuildFile; fileRef = A16C48350DE389CB00F4A0B3 /* oscilloscope.png */; };
+		D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */; };
+		D750B7281A798E10009F8B8F /* CABitOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7271A798E10009F8B8F /* CABitOperations.swift */; };
+		D750B72A1A7B9A90009F8B8F /* FFTHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7291A7B9A90009F8B8F /* FFTHelper.swift */; };
+		D750B72C1A7BA044009F8B8F /* BufferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B72B1A7BA044009F8B8F /* BufferManager.swift */; };
+		D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C571A7C7D2C0036AD3C /* CAXException.swift */; };
+		D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */; };
+		D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */; };
+		D7536C661A7D21710036AD3C /* AudioController+RenderCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */; };
+		D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C6A1A7D3B590036AD3C /* EAGLView.swift */; };
+		D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7536CA91A7E26030036AD3C /* ReadMe.txt */; };
+		D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */; };
+		D7AE53681A85B3B40085AA3B /* AudioBufferList+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */; };
+		D7AE53691A85B3B40085AA3B /* empty_struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53641A85B3B40085AA3B /* empty_struct.swift */; };
+		D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */; };
+		D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */; };
+		D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */; };
+		D7AE536E1A85BFE20085AA3B /* CADebugMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */; };
+		F7CF73110EB1258D0099AA71 /* sonogram.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73100EB1258D0099AA71 /* sonogram.png */; };
+		F7CF73160EB126740099AA71 /* fft_off.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73120EB126740099AA71 /* fft_off.png */; };
+		F7CF73170EB126740099AA71 /* fft_on.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73130EB126740099AA71 /* fft_on.png */; };
+		F7CF73180EB126740099AA71 /* mute_off.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73140EB126740099AA71 /* mute_off.png */; };
+		F7CF73190EB126740099AA71 /* mute_on.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73150EB126740099AA71 /* mute_on.png */; };
+		F7DF06DE0DF4AD57005687F5 /* button_press.caf in Resources */ = {isa = PBXBuildFile; fileRef = F7DF06DC0DF4AD57005687F5 /* button_press.caf */; };
+		F7E58EDA0DCFD988006C4A2F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7E58ED90DCFD988006C4A2F /* AudioToolbox.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* aurioTouch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aurioTouch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2B40B59318873E0600F4A921 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
+		2B71304618EB80A800DA9374 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2B86B2B118F35C2300347397 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
+		8250CD56145B602D00806437 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
+		A15CFB1C0DE4A8C600FB5D08 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
+		A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A16C48350DE389CB00F4A0B3 /* oscilloscope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oscilloscope.png; sourceTree = "<group>"; };
+		D750B7241A798B8F009F8B8F /* aurioTouch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aurioTouch-Bridging-Header.h"; sourceTree = "<group>"; };
+		D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DCRejectionFilter.swift; sourceTree = "<group>"; };
+		D750B7271A798E10009F8B8F /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
+		D750B7291A7B9A90009F8B8F /* FFTHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFTHelper.swift; sourceTree = "<group>"; };
+		D750B72B1A7BA044009F8B8F /* BufferManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferManager.swift; sourceTree = "<group>"; };
+		D7536C571A7C7D2C0036AD3C /* CAXException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAXException.swift; sourceTree = "<group>"; };
+		D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
+		D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAStreamBasicDescription.swift; sourceTree = "<group>"; };
+		D7536C641A7D21580036AD3C /* AudioController+RenderCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AudioController+RenderCallback.h"; sourceTree = "<group>"; };
+		D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AudioController+RenderCallback.m"; sourceTree = "<group>"; };
+		D7536C6A1A7D3B590036AD3C /* EAGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
+		D7536CA91A7E26030036AD3C /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
+		D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
+		D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AudioBufferList+.swift"; path = "OOPUtils/AudioBufferList+.swift"; sourceTree = "<group>"; };
+		D7AE53641A85B3B40085AA3B /* empty_struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = empty_struct.swift; path = OOPUtils/empty_struct.swift; sourceTree = "<group>"; };
+		D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericArithmetic.swift; path = OOPUtils/GenericArithmetic.swift; sourceTree = "<group>"; };
+		D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NumTypes+Conversion.swift"; path = "OOPUtils/NumTypes+Conversion.swift"; sourceTree = "<group>"; };
+		D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OOPExceptions.swift; path = OOPUtils/OOPExceptions.swift; sourceTree = "<group>"; };
+		D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CADebugMacros.swift; sourceTree = "<group>"; };
+		D7AE536F1A85CB240085AA3B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F7CF73100EB1258D0099AA71 /* sonogram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sonogram.png; sourceTree = "<group>"; };
+		F7CF73120EB126740099AA71 /* fft_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fft_off.png; sourceTree = "<group>"; };
+		F7CF73130EB126740099AA71 /* fft_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fft_on.png; sourceTree = "<group>"; };
+		F7CF73140EB126740099AA71 /* mute_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mute_off.png; sourceTree = "<group>"; };
+		F7CF73150EB126740099AA71 /* mute_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mute_on.png; sourceTree = "<group>"; };
+		F7DF06DC0DF4AD57005687F5 /* button_press.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = button_press.caf; sourceTree = "<group>"; };
+		F7E58ED90DCFD988006C4A2F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B71304718EB80A800DA9374 /* AVFoundation.framework in Frameworks */,
+				8250CD57145B602D00806437 /* Accelerate.framework in Frameworks */,
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
+				F7E58EDA0DCFD988006C4A2F /* AudioToolbox.framework in Frameworks */,
+				A16C47120DE37F9E00F4A0B3 /* OpenGLES.framework in Frameworks */,
+				A16C473F0DE3801700F4A0B3 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				D7536C6A1A7D3B590036AD3C /* EAGLView.swift */,
+				D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */,
+				D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */,
+				D7536C641A7D21580036AD3C /* AudioController+RenderCallback.h */,
+				D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */,
+				D750B72B1A7BA044009F8B8F /* BufferManager.swift */,
+				D750B7291A7B9A90009F8B8F /* FFTHelper.swift */,
+				D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */,
+				D750B7241A798B8F009F8B8F /* aurioTouch-Bridging-Header.h */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* aurioTouch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				D7AE536F1A85CB240085AA3B /* README.md */,
+				D7536CA91A7E26030036AD3C /* ReadMe.txt */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D7536C5D1A7CD0380036AD3C /* OOPUtils */,
+				F74ADD0E0DDA24AA0046BEC2 /* PublicUtility */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2B86B2B018F35C2300347397 /* MainWindow.xib */,
+				F7D3FD760FD49018003CBAE4 /* audio */,
+				F7D3FD800FD49094003CBAE4 /* images */,
+				2B40B59318873E0600F4A921 /* Default-568h@2x.png */,
+				A15CFB1C0DE4A8C600FB5D08 /* icon.png */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2B71304618EB80A800DA9374 /* AVFoundation.framework */,
+				8250CD56145B602D00806437 /* Accelerate.framework */,
+				A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */,
+				A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */,
+				F7E58ED90DCFD988006C4A2F /* AudioToolbox.framework */,
+				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D7536C5D1A7CD0380036AD3C /* OOPUtils */ = {
+			isa = PBXGroup;
+			children = (
+				D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */,
+				D7AE53641A85B3B40085AA3B /* empty_struct.swift */,
+				D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */,
+				D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */,
+				D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */,
+			);
+			name = OOPUtils;
+			sourceTree = "<group>";
+		};
+		F74ADD0E0DDA24AA0046BEC2 /* PublicUtility */ = {
+			isa = PBXGroup;
+			children = (
+				D750B7271A798E10009F8B8F /* CABitOperations.swift */,
+				D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */,
+				D7536C571A7C7D2C0036AD3C /* CAXException.swift */,
+				D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */,
+			);
+			path = PublicUtility;
+			sourceTree = "<group>";
+		};
+		F7D3FD760FD49018003CBAE4 /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				F7DF06DC0DF4AD57005687F5 /* button_press.caf */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
+		F7D3FD800FD49094003CBAE4 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				F7CF73120EB126740099AA71 /* fft_off.png */,
+				F7CF73130EB126740099AA71 /* fft_on.png */,
+				F7CF73140EB126740099AA71 /* mute_off.png */,
+				F7CF73150EB126740099AA71 /* mute_on.png */,
+				A16C48350DE389CB00F4A0B3 /* oscilloscope.png */,
+				F7CF73100EB1258D0099AA71 /* sonogram.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* aurioTouch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "aurioTouch" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = aurioTouch;
+			productName = aurioTouch;
+			productReference = 1D6058910D05DD3D006BFB54 /* aurioTouch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "aurioTouch" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				en,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* aurioTouch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A16C48360DE389CB00F4A0B3 /* oscilloscope.png in Resources */,
+				A15CFB1D0DE4A8C600FB5D08 /* icon.png in Resources */,
+				2B40B59418873E0600F4A921 /* Default-568h@2x.png in Resources */,
+				F7DF06DE0DF4AD57005687F5 /* button_press.caf in Resources */,
+				F7CF73110EB1258D0099AA71 /* sonogram.png in Resources */,
+				F7CF73160EB126740099AA71 /* fft_off.png in Resources */,
+				2B86B2B218F35C2300347397 /* MainWindow.xib in Resources */,
+				D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */,
+				F7CF73170EB126740099AA71 /* fft_on.png in Resources */,
+				F7CF73180EB126740099AA71 /* mute_off.png in Resources */,
+				F7CF73190EB126740099AA71 /* mute_on.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D750B72A1A7B9A90009F8B8F /* FFTHelper.swift in Sources */,
+				D7AE53691A85B3B40085AA3B /* empty_struct.swift in Sources */,
+				D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */,
+				D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */,
+				D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */,
+				D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */,
+				D750B7281A798E10009F8B8F /* CABitOperations.swift in Sources */,
+				D7AE53681A85B3B40085AA3B /* AudioBufferList+.swift in Sources */,
+				D750B72C1A7BA044009F8B8F /* BufferManager.swift in Sources */,
+				D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */,
+				D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */,
+				D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */,
+				D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */,
+				D7536C661A7D21710036AD3C /* AudioController+RenderCallback.m in Sources */,
+				D7AE536E1A85BFE20085AA3B /* CADebugMacros.swift in Sources */,
+				D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2B86B2B018F35C2300347397 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B86B2B118F35C2300347397 /* en */,
+			);
+			name = MainWindow.xib;
+			path = images;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = aurioTouch_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = aurioTouch;
+				SDKROOT = iphoneos.internal;
+				SWIFT_OBJC_BRIDGING_HEADER = "Classes/aurioTouch-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = aurioTouch_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = aurioTouch;
+				SDKROOT = iphoneos.internal;
+				SWIFT_OBJC_BRIDGING_HEADER = "Classes/aurioTouch-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "aurioTouch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "aurioTouch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
