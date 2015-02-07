@@ -3,6 +3,8 @@
 //  OOPUtils
 //
 //  Created by OOPer in cooperation with shlab.jp, on 2015/1/12.
+//
+//
 /*
 Copyright (c) 2015, OOPer(NAGATA, Atsuyuki)
 All rights reserved.
@@ -32,8 +34,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-//
-//
 
 import Foundation
 import CoreGraphics

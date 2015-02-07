@@ -2,7 +2,7 @@
 //  aurioTouchAppDelegate.swift
 //  aurioTouch
 //
-//  Created by 開発 on 2015/2/1.
+//  Translated by OOPer in cooperation with shlab.jp, on 2015/2/1.
 //
 //
 /*
