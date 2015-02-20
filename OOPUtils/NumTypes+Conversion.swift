@@ -297,15 +297,15 @@ extension CGFloat {
 }
 
 //Int8
-extension CChar: UnicodeScalarLiteralConvertible {
-    public init(unicodeScalarLiteral: UnicodeScalar) {
-        self = CChar(unicodeScalarLiteral.value)
+extension CChar {
+    public init(_ v: UnicodeScalar) {
+        self = CChar(v.value)
     }
 }
 
 //UInt16
-extension unichar: UnicodeScalarLiteralConvertible {
-    public init(unicodeScalarLiteral: UnicodeScalar) {
-        self = unichar(unicodeScalarLiteral.value)
+extension unichar {
+    public init(_ v: UnicodeScalar) {
+        self = unichar(v.value)
     }
 }

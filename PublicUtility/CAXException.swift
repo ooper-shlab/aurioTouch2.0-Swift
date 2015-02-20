@@ -65,8 +65,8 @@ class CAX4CCString {
         str[3] = CChar((error >> 8) & 0xFF)
         str[4] = CChar(error & 0xFF)
         if isprint(Int32(str[1])) != 0 && isprint(Int32(str[2])) != 0 && isprint(Int32(str[3])) != 0 && isprint(Int32(str[4])) != 0 {
-            str[0] = "\'"
-            str[5] = "\'"
+            str[0] = CChar("\'")
+            str[5] = CChar("\'")
             str[6] = 0
             mStr = String.fromCString(str)!
         } else if error > -200000 && error < 200000 {
