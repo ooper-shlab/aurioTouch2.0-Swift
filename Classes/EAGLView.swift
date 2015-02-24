@@ -148,7 +148,7 @@ class EAGLView: UIView {
         self.frame = UIScreen.mainScreen().bounds
         
         // Get the layer
-        let eaglLayer = self.layer as CAEAGLLayer
+        let eaglLayer = self.layer as! CAEAGLLayer
         
         eaglLayer.opaque = true
         
@@ -241,7 +241,7 @@ class EAGLView: UIView {
         
         glBindFramebufferOES(GL_FRAMEBUFFER_OES.ui, viewFramebuffer)
         glBindRenderbufferOES(GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
-        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, fromDrawable: self.layer as EAGLDrawable)
+        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, fromDrawable: self.layer as! EAGLDrawable)
         glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES.ui, GL_COLOR_ATTACHMENT0_OES.ui, GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
         
         glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES.ui, GL_RENDERBUFFER_WIDTH_OES.ui, &backingWidth)
@@ -719,11 +719,12 @@ class EAGLView: UIView {
         }
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         // If we're if waveform mode and not currently in a pinch event, and we've got two touches, start a pinch event
-        if pinchEvent == nil && event.allTouches()?.count == 2 && displayMode == .OscilloscopeWaveform {
+        if let eventTouches = event.allTouches()
+            where pinchEvent == nil && eventTouches.count == 2 && displayMode == .OscilloscopeWaveform {
             pinchEvent = event
-            let t = event.allTouches()?.allObjects as [UITouch]
+            let t = Array(eventTouches) as! [UITouch]
             lastPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
             
             let hwSampleRate = audioController.sessionSampleRate
@@ -733,12 +734,13 @@ class EAGLView: UIView {
         }
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         // If we are in a pinch event...
-        if event == pinchEvent && event.allTouches()?.count == 2 {
+        if let eventTouches = event.allTouches()
+            where event == pinchEvent && eventTouches.count == 2 {
             var thisPinchDist: CGFloat
             var pinchDiff: CGFloat
-            let t = event.allTouches()?.allObjects as [UITouch]
+            let t = Array(eventTouches) as! [UITouch]
             thisPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
             
             // Find out how far we traveled since the last event
@@ -848,7 +850,7 @@ class EAGLView: UIView {
         spriteData.dealloc(Int(texH * texW * 4))
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches:Set<NSObject>, withEvent event: UIEvent) {
         let bufferManager = audioController.bufferManagerInstance
         if event == pinchEvent {
             // If our pinch/zoom has ended, nil out the pinchEvent and remove the overlay view
@@ -869,7 +871,7 @@ class EAGLView: UIView {
         let offsetY = (self.bounds.size.height - 480) / 2
         let offsetX = (self.bounds.size.width - 320) / 2
         
-        let touch = touches.anyObject() as UITouch
+        let touch = touches.first as! UITouch
         if CGRectContainsPoint(CGRectMake(offsetX, 15.0, 52.0, 99.0), touch.locationInView(self)) { // The Sonogram button was touched
             audioController.playButtonPressedSound()
             if displayMode == .OscilloscopeWaveform || displayMode == .OscilloscopeFFT {

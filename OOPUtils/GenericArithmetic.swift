@@ -65,9 +65,9 @@ protocol IntegerInitializable: IntegerLiteralConvertible {
 protocol IntegerArithmeticType: IntegerInitializable, ArithmeticType {
     func &+(lhs: Self, rhs: Self) -> Self
     func &-(lhs: Self, rhs: Self) -> Self
-    func &/(lhs: Self, rhs: Self) -> Self
+//    func &/(lhs: Self, rhs: Self) -> Self
     func &*(lhs: Self, rhs: Self) -> Self
-    func &%(lhs: Self, rhs: Self) -> Self
+//    func &%(lhs: Self, rhs: Self) -> Self
     
     func << (lhs: Self, rhs: Self) -> Self
     func >> (lhs: Self, rhs: Self) -> Self

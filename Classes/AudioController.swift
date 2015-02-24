@@ -116,7 +116,7 @@ class AudioController: NSObject {
         return err;
     }
     
-    private var performRenderCallback: AudioController_RenderBlock?
+    @objc var performRenderCallback: AudioController_RenderBlock?
     
     
     override init() {
@@ -131,7 +131,7 @@ class AudioController: NSObject {
     
     func handleInterruption(notification: NSNotification) {
         oop_try {
-            let theInterruptionType = notification.userInfo![AVAudioSessionInterruptionTypeKey] as UInt
+            let theInterruptionType = notification.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
             NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.Began.rawValue ? "Begin Interruption" : "End Interruption")
             
             if theInterruptionType == AVAudioSessionInterruptionType.Began.rawValue {
@@ -155,8 +155,8 @@ class AudioController: NSObject {
     
     
     func handleRouteChange(notification: NSNotification) {
-        let reasonValue = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as UInt
-        let routeDescription = notification.userInfo![AVAudioSessionRouteChangePreviousRouteKey] as AVAudioSessionRouteDescription
+        let reasonValue = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        let routeDescription = notification.userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription
         
         NSLog("Route change:")
         if let reason = AVAudioSessionRouteChangeReason(rawValue: reasonValue) {
@@ -302,7 +302,7 @@ class AudioController: NSObject {
             
             
             // Set the render callback on AURemoteIO
-            var renderCallback = createRenderCallback(&self.performRenderCallback)
+            var renderCallback = createRenderCallback(self)
             if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, kAudioUnitProperty_SetRenderCallback.ui, kAudioUnitScope_Input.ui, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO") {return ex}
             
             // Initialize the AURemoteIO instance

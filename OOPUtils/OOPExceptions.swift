@@ -84,7 +84,7 @@ class OOPCatchable {
     
     func catch<T: OOPThrowable> (catchBlock: (T)->OOPThrowable?) -> OOPCatchable {
         if self.exception != nil && self.exception! is T {
-            var exception = catchBlock(self.exception! as T)
+            var exception = catchBlock(self.exception! as! T)
             self.exception = nil
             self.anotherException = exception
         }

@@ -11,6 +11,8 @@
 
 #import <AudioUnit/AudioUnitProperties.h>
 
+@class AudioController;
+
 typedef OSStatus
 (^AudioController_RenderBlock)(
     AudioUnitRenderActionFlags *    ioActionFlags,
@@ -19,6 +21,6 @@ typedef OSStatus
     UInt32                          inNumberFrames,
     AudioBufferList *               ioData);
 
-AURenderCallbackStruct createRenderCallback(const AudioController_RenderBlock *block);
+AURenderCallbackStruct createRenderCallback(const AudioController *controller);
 
 #endif

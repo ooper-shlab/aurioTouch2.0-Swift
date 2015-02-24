@@ -60,7 +60,7 @@ import UIKit
 @UIApplicationMain
 @objc(aurioTouchAppDelegate)
 class aurioTouchAppDelegate: NSObject, UIApplicationDelegate {
-    @IBOutlet var window: UIWindow!
+    @IBOutlet var window: UIWindow?
     @IBOutlet var view: EAGLView!
     
     //MARK:-
@@ -72,12 +72,12 @@ class aurioTouchAppDelegate: NSObject, UIApplicationDelegate {
         let myVC = UIViewController(nibName: nil, bundle: nil)
         myVC.view = view
         
-        self.window.rootViewController = myVC
+        self.window?.rootViewController = myVC
         
         // Turn off the idle timer, since this app doesn't rely on constant touch input
         application.idleTimerDisabled = true
         
-        window.makeKeyAndVisible()
+        window?.makeKeyAndVisible()
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
