@@ -30,7 +30,6 @@
 		D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7536CA91A7E26030036AD3C /* ReadMe.txt */; };
 		D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */; };
 		D7AE53681A85B3B40085AA3B /* AudioBufferList+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */; };
-		D7AE53691A85B3B40085AA3B /* empty_struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53641A85B3B40085AA3B /* empty_struct.swift */; };
 		D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */; };
 		D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */; };
 		D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */; };
@@ -72,7 +71,6 @@
 		D7536CA91A7E26030036AD3C /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
 		D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AudioBufferList+.swift"; path = "OOPUtils/AudioBufferList+.swift"; sourceTree = "<group>"; };
-		D7AE53641A85B3B40085AA3B /* empty_struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = empty_struct.swift; path = OOPUtils/empty_struct.swift; sourceTree = "<group>"; };
 		D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericArithmetic.swift; path = OOPUtils/GenericArithmetic.swift; sourceTree = "<group>"; };
 		D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NumTypes+Conversion.swift"; path = "OOPUtils/NumTypes+Conversion.swift"; sourceTree = "<group>"; };
 		D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OOPExceptions.swift; path = OOPUtils/OOPExceptions.swift; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 			isa = PBXGroup;
 			children = (
 				D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */,
-				D7AE53641A85B3B40085AA3B /* empty_struct.swift */,
 				D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */,
 				D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */,
 				D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */,
@@ -300,7 +297,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D750B72A1A7B9A90009F8B8F /* FFTHelper.swift in Sources */,
-				D7AE53691A85B3B40085AA3B /* empty_struct.swift in Sources */,
 				D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */,
 				D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */,
 				D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */,

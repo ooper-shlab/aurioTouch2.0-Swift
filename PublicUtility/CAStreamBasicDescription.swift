@@ -75,7 +75,8 @@ extension AudioStreamBasicDescription {
     }
     
     //	Construction/Destruction
-    init() {self = empty_struct()}
+    //You have all-zero default initializer for imported structs in Swift 1.2 .
+//    init() {self = empty_struct()}
     
     init(desc: AudioStreamBasicDescription) {
         self = desc
