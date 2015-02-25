@@ -10,22 +10,25 @@
 #import "aurioTouch-Swift.h"
 
 OSStatus
-AudioController_RenderCallback(
-    void *                          inRefCon,
-    AudioUnitRenderActionFlags *    ioActionFlags,
-    const AudioTimeStamp *          inTimeStamp,
-    UInt32                          inBusNumber,
-    UInt32                          inNumberFrames,
-    AudioBufferList *               ioData)
+AudioController_RenderCallback(void *                          inRefCon,
+                               AudioUnitRenderActionFlags *    ioActionFlags,
+                               const AudioTimeStamp *          inTimeStamp,
+                               UInt32                          inBufNumber,
+                               UInt32                          inNumberFrames,
+                               AudioBufferList *               ioData)
 {
-    AudioController *controller = (AudioController *)inRefCon;
-    OSStatus result = controller.performRenderCallback(ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
+    id<AURenderCallbackDelegate> delegate = (id<AURenderCallbackDelegate>)inRefCon;
+    OSStatus result = [delegate performRender: ioActionFlags
+                                  inTimeStamp: inTimeStamp
+                                  inBufNumber: inBufNumber
+                               inNumberFrames: inNumberFrames
+                                       ioData: ioData];
     return result;
 }
 
-AURenderCallbackStruct createRenderCallback(const AudioController *controller) {
+AURenderCallbackStruct createRenderCallback(const id<AURenderCallbackDelegate> delegate) {
     AURenderCallbackStruct renderCallback;
     renderCallback.inputProc = AudioController_RenderCallback;
-    renderCallback.inputProcRefCon = (void*)controller;
+    renderCallback.inputProcRefCon = (void*)delegate;
     return renderCallback;
 }

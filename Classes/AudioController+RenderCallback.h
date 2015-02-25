@@ -11,16 +11,14 @@
 
 #import <AudioUnit/AudioUnitProperties.h>
 
-@class AudioController;
+@protocol AURenderCallbackDelegate
+- (OSStatus)performRender:(AudioUnitRenderActionFlags *)ioActionFlags
+              inTimeStamp:(const AudioTimeStamp *)inTimeStamp
+              inBufNumber:(UInt32)inBufNumber
+           inNumberFrames:(UInt32)inNumberFrames
+                   ioData:(AudioBufferList *)ioData;
+@end
 
-typedef OSStatus
-(^AudioController_RenderBlock)(
-    AudioUnitRenderActionFlags *    ioActionFlags,
-    const AudioTimeStamp *          inTimeStamp,
-    UInt32                          inBusNumber,
-    UInt32                          inNumberFrames,
-    AudioBufferList *               ioData);
-
-AURenderCallbackStruct createRenderCallback(const AudioController *controller);
+AURenderCallbackStruct createRenderCallback(const id<AURenderCallbackDelegate> delegate);
 
 #endif

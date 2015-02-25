@@ -61,7 +61,7 @@ import AVFoundation
 
 
 @objc(AudioController)
-class AudioController: NSObject {
+class AudioController: NSObject, AURenderCallbackDelegate {
     
     var _rioUnit: AudioUnit = AudioUnit()
     var _bufferManager: BufferManager!
@@ -76,7 +76,6 @@ class AudioController: NSObject {
         case OscilloscopeFFT
         case Spectrum
     }
-    
     
     // Render callback function
     func performRender(
@@ -116,7 +115,7 @@ class AudioController: NSObject {
         return err;
     }
     
-    @objc var performRenderCallback: AudioController_RenderBlock?
+//    @objc var performRenderCallback: AudioController_RenderBlock?
     
     
     override init() {
@@ -124,7 +123,7 @@ class AudioController: NSObject {
         _dcRejectionFilter = nil
         muteAudio = true
         super.init()
-        performRenderCallback = self.performRender
+//        performRenderCallback = self.performRender
         self.setupAudioChain()
     }
     
