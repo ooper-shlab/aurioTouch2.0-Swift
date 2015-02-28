@@ -155,7 +155,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     
     func handleRouteChange(notification: NSNotification) {
         let reasonValue = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-        let routeDescription = notification.userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription
+        let routeDescription = notification.userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription?
         
         NSLog("Route change:")
         if let reason = AVAudioSessionRouteChangeReason(rawValue: reasonValue) {
@@ -182,8 +182,10 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             NSLog("     ReasonUnknown(%zu)", reasonValue)
         }
         
-        NSLog("Previous route:\n")
-        NSLog("%@", routeDescription)
+        if let prevRout = routeDescription {
+            NSLog("Previous route:\n")
+            NSLog("%@", prevRout)
+        }
     }
     
     func handleMediaServerReset(notification: NSNotification) {
