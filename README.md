@@ -2,8 +2,6 @@
 
 Translated by OOPer in cooperation with shlab.jp, on 2015/2/1.
 
-Adapted to Swift 1.2 beta2 on 2015/2/24.
-
 The translated project contains Objective-C files, to use with C-function callbacks.
 For somebody who are searching a full-Swift solution, this is not yours.
 
@@ -18,7 +16,7 @@ You should not contact to Apple or SHLab(jp) about any faults caused by my trans
 ===========================================================================
 BUILD REQUIREMENTS:
 
-Xcode 6.3 beta2, iOS SDK 8.3
+Xcode 6.3, iOS SDK 8.3
 
 ===========================================================================
 Files under PublicUtility are not fully translated. Their license terms are kept there just to indicate the original files.
