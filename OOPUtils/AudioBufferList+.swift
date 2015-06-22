@@ -46,10 +46,10 @@ func AudioBufferList_getAudioBufferPtr(ptrAudioBufferList: UnsafeMutablePointer<
     ptr = ptr.advancedBy(AudioBufferList_size(index))
     return UnsafeMutablePointer(ptr)
 }
-func AudioBufferList_getAudioBuffer(ptrAudioBufferList: UnsafeMutablePointer<Void>, index: Int) -> AudioBuffer {
-    return AudioBufferList_getAudioBufferPtr(ptrAudioBufferList, index).memory
+func AudioBufferList_getAudioBuffer(ptrAudioBufferList: UnsafeMutablePointer<Void>, _ index: Int) -> AudioBuffer {
+    return AudioBufferList_getAudioBufferPtr(ptrAudioBufferList, index: index).memory
 }
-func AudioBufferList_getDataPtr<T>(ptrAudioBufferList: UnsafeMutablePointer<Void>, index: Int) -> UnsafeMutablePointer<T> {
+func AudioBufferList_getDataPtr<T>(ptrAudioBufferList: UnsafeMutablePointer<Void>, _ index: Int) -> UnsafeMutablePointer<T> {
     return UnsafeMutablePointer(AudioBufferList_getAudioBuffer(ptrAudioBufferList, index).mData)
 }
 func AudioBufferList_getDataSize(ptrAudioBufferList: UnsafeMutablePointer<Void>, index: Int) -> Int {

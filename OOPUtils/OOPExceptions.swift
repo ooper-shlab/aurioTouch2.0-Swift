@@ -37,7 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Foundation
 
-class OOPThrowable: Printable {
+public class OOPThrowable: CustomStringConvertible, ErrorType {
+    public var _domain: String = "OOPThrowable"
+    public var _code: Int = 0
+    
     private(set) var message: String
     var localizedMessage: String {return message}
     private(set) var cause: OOPThrowable?
@@ -65,57 +68,11 @@ class OOPThrowable: Printable {
         self.cause = cause
     }
 
-    var description: String {
+    public var description: String {
         return "\(message) in \(function) of \(file):\(line)"
     }
     //We don't have stack trace facility for now.
 }
 class OOPException: OOPThrowable {
     
-}
-
-class OOPCatchable {
-    private var exception: OOPThrowable?
-    private var anotherException: OOPThrowable?
-    
-    private init(exception: OOPThrowable?) {
-        self.exception = exception
-    }
-    
-    func catch<T: OOPThrowable> (catchBlock: (T)->OOPThrowable?) -> OOPCatchable {
-        if self.exception != nil && self.exception! is T {
-            var exception = catchBlock(self.exception! as! T)
-            self.exception = nil
-            self.anotherException = exception
-        }
-        return self
-    }
-    
-    func finally(finalBlock: ()->OOPThrowable?) -> OOPCatchable {
-        var exception = finalBlock()
-        self.anotherException = exception
-        self.exception = nil
-        return self
-    }
-    
-    func done() {
-        if self.exception != nil {
-            fatalError(self.exception!.description)
-        } else if self.anotherException != nil {
-            fatalError(self.anotherException!.description)
-        }
-    }
-    
-    func propagate() -> OOPThrowable? {
-        if self.exception != nil {
-            return self.exception
-        } else {
-            return self.anotherException
-        }
-    }
-}
-
-func oop_try(block: ()->OOPThrowable?) -> OOPCatchable {
-    var exception = block()
-    return OOPCatchable(exception: exception)
 }

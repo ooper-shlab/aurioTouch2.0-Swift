@@ -111,39 +111,33 @@ class CAXException: OOPException {
     }
     
     class func warning(s: String, error: OSStatus) {
-        My.sWarningHandler?(s, error)
+        sWarningHandler?(s, error)
     }
     
-    class func setWarningHandler(f: WarningHandler) { My.sWarningHandler = f }
-    private struct My {
-        static var sWarningHandler: WarningHandler? = nil
-    }
+    class func setWarningHandler(f: WarningHandler) { sWarningHandler = f }
+    private static var sWarningHandler: WarningHandler? = nil
     
     override var description: String {
         return "Error \(formatError()) in operation: \(mOperation)"
     }
 }
 
-func XExceptionIfError(error: NSError?, operation: String) -> CAXException? {
+func XExceptionIfError(error: NSError?, _ operation: String) throws {
     if error != nil && error!.code != 0 {
-        return CAXException(operation: operation, err: OSStatus(error!.code))
-    } else {
-        return nil
+        throw CAXException(operation: operation, err: OSStatus(error!.code))
     }
 }
-func XFailIfError(error: NSError?, operation: String) {
+func XFailIfError(error: NSError?, _ operation: String) {
     if error != nil && error!.code != 0 {
         XFailIfError(OSStatus(error!.code), operation)
     }
 }
-func XExceptionIfError(error: OSStatus, operation: String) -> CAXException? {
+func XExceptionIfError(error: OSStatus, _ operation: String) throws {
     if error != 0 {
-        return CAXException(operation: operation, err: error)
-    } else {
-        return nil
+        throw CAXException(operation: operation, err: error)
     }
 }
-func XFailIfError(error: OSStatus, operation: String) {
+func XFailIfError(error: OSStatus, _ operation: String) {
     if error != 0 {
         fatalError(CAXException(operation: operation, err: error).description)
     }

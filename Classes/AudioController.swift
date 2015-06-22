@@ -60,6 +60,32 @@ import AudioToolbox
 import AVFoundation
 
 
+@objc protocol AURenderCallbackDelegate {
+    func performRender(ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+        inTimeStamp: UnsafePointer<AudioTimeStamp>,
+        inBufNumber: UInt32,
+        inNumberFrames: UInt32,
+        ioData: UnsafeMutablePointer<AudioBufferList>) -> OSStatus
+}
+
+private func AudioController_RenderCallback(inRefCon: UnsafeMutablePointer<Void>,
+        ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+        inTimeStamp: UnsafePointer<AudioTimeStamp>,
+        inBufNumber: UInt32,
+        inNumberFrames: UInt32,
+        ioData: UnsafeMutablePointer<AudioBufferList>)
+    -> OSStatus
+{
+    let delegate = unsafeBitCast(inRefCon, AURenderCallbackDelegate.self)
+    let result = delegate.performRender(ioActionFlags,
+        inTimeStamp: inTimeStamp,
+        inBufNumber: inBufNumber,
+        inNumberFrames: inNumberFrames,
+        ioData: ioData)
+    return result
+}
+
+
 @objc(AudioController)
 class AudioController: NSObject, AURenderCallbackDelegate {
     
@@ -107,7 +133,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             // mute audio if needed
             if muteAudio {
                 for i in 0..<Int(ioData.memory.mNumberBuffers) {
-                    memset(AudioBufferList_getDataPtr(ioData, 0), 0, size_t(AudioBufferList_getDataSize(ioData, i)))
+                    memset(AudioBufferList_getDataPtr(ioData, 0), 0, size_t(AudioBufferList_getDataSize(ioData, index: i)))
                 }
             }
         }
@@ -115,21 +141,18 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         return err;
     }
     
-//    @objc var performRenderCallback: AudioController_RenderBlock?
-    
     
     override init() {
         _bufferManager = nil
         _dcRejectionFilter = nil
         muteAudio = true
         super.init()
-//        performRenderCallback = self.performRender
         self.setupAudioChain()
     }
     
     
     func handleInterruption(notification: NSNotification) {
-        oop_try {
+//        do {
             let theInterruptionType = notification.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
             NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.Began.rawValue ? "Begin Interruption" : "End Interruption")
             
@@ -139,17 +162,19 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             
             if theInterruptionType == AVAudioSessionInterruptionType.Ended.rawValue {
                 // make sure to activate the session
-                var error: NSError? = nil
-                AVAudioSession.sharedInstance().setActive(true, error: &error)
-                if error != nil {NSLog("AVAudioSession set active failed with error: %@", error!)}
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch let error as NSError {
+                    NSLog("AVAudioSession set active failed with error: %@", error)
+                } catch {
+                    fatalError()
+                }
                 
                 self.startIOUnit()
             }
-            return nil
-            }.catch {(e: CAXException) in
-                fputs("Error: \(e.mOperation) (\(e.formatError()))\n", stderr)
-                return nil
-        }
+//        } catch let e as CAXException {
+//            fputs("Error: \(e.mOperation) (\(e.formatError()))\n", stderr)
+//        }
     }
     
     
@@ -206,23 +231,37 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     private func setupAudioSession() {
-        oop_try {
+        do {
             // Configure the audio session
             let sessionInstance = AVAudioSession.sharedInstance()
             
             // we are going to play and record so we pick that category
-            var error: NSError? = nil
-            sessionInstance.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
-            if let ex=XExceptionIfError(error, "couldn't set session's I/O buffer duration") {return ex}
+            do {
+                try sessionInstance.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            } catch let error as NSError {
+                try XExceptionIfError(error, "couldn't set session's audio category")
+            } catch {
+                fatalError()
+            }
             
             // set the buffer duration to 5 ms
             let bufferDuration: NSTimeInterval = 0.005
-            sessionInstance.setPreferredIOBufferDuration(bufferDuration, error: &error)
-            if let ex=XExceptionIfError(error, "couldn't set session's I/O buffer duration") {return ex}
+            do {
+                try sessionInstance.setPreferredIOBufferDuration(bufferDuration)
+            } catch let error as NSError {
+                try XExceptionIfError(error, "couldn't set session's I/O buffer duration")
+            } catch {
+                fatalError()
+            }
             
-            // set the session's sample rate
-            sessionInstance.setPreferredSampleRate(44100, error: &error)
-            if let ex=XExceptionIfError(error, "couldn't set session's preferred sample rate") {return ex}
+            do {
+                // set the session's sample rate
+                try sessionInstance.setPreferredSampleRate(44100)
+            } catch let error as NSError {
+                try XExceptionIfError(error, "couldn't set session's preferred sample rate")
+            } catch {
+                fatalError()
+            }
             
             // add interruption handler
             NSNotificationCenter.defaultCenter().addObserver(self,
@@ -242,26 +281,25 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 name: AVAudioSessionMediaServicesWereResetNotification,
                 object: sessionInstance)
             
-            // activate the audio session
-            sessionInstance.setActive(true, error: &error)
-            if let ex=XExceptionIfError(error, "couldn't set session active") {return ex}
-            return nil
-        }
-        
-        .catch {(e: CAXException) in
+            do {
+                // activate the audio session
+                try sessionInstance.setActive(true)
+            } catch let error as NSError {
+                try XExceptionIfError(error, "couldn't set session active")
+            } catch {
+                fatalError()
+            }
+        } catch let e as CAXException {
             NSLog("Error returned from setupAudioSession: %d: %@", Int32(e.mError), e.mOperation)
-            return nil
-        }
-        .catch {t in
+        } catch _ {
             NSLog("Unknown error returned from setupAudioSession")
-            return nil
-        }.done()
+        }
         
     }
     
     
     private func setupIOUnit() {
-        oop_try {
+        do {
             // Create a new instance of AURemoteIO
             
             var desc = AudioComponentDescription(
@@ -272,63 +310,61 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 componentFlagsMask: 0)
             
             let comp = AudioComponentFindNext(nil, &desc)
-            if let ex=XExceptionIfError(AudioComponentInstanceNew(comp, &self._rioUnit), "couldn't create a new instance of AURemoteIO") {return ex}
+            try XExceptionIfError(AudioComponentInstanceNew(comp, &self._rioUnit), "couldn't create a new instance of AURemoteIO")
             
             //  Enable input and output on AURemoteIO
             //  Input is enabled on the input scope of the input element
             //  Output is enabled on the output scope of the output element
             
             var one: UInt32 = 1
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Input), 1, &one, SizeOf32(one)), "could not enable input on AURemoteIO") {return ex}
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Output), 0, &one, SizeOf32(one)), "could not enable output on AURemoteIO") {return ex}
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Input), 1, &one, SizeOf32(one)), "could not enable input on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Output), 0, &one, SizeOf32(one)), "could not enable output on AURemoteIO")
             
             // Explicitly set the input and output client formats
             // sample rate = 44100, num channels = 1, format = 32 bit floating point
             
             var ioFormat = CAStreamBasicDescription(sampleRate: 44100, numChannels: 1, pcmf: .Float32, isInterleaved: false)
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Output), 1, &ioFormat, SizeOf32(ioFormat)), "couldn't set the input client format on AURemoteIO") {return ex}
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Input), 0, &ioFormat, SizeOf32(ioFormat)), "couldn't set the output client format on AURemoteIO") {return ex}
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Output), 1, &ioFormat, SizeOf32(ioFormat)), "couldn't set the input client format on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Input), 0, &ioFormat, SizeOf32(ioFormat)), "couldn't set the output client format on AURemoteIO")
             
             // Set the MaximumFramesPerSlice property. This property is used to describe to an audio unit the maximum number
             // of samples it will be asked to produce on any single given call to AudioUnitRender
             var maxFramesPerSlice: UInt32 = 4096
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_MaximumFramesPerSlice), AudioUnitScope(kAudioUnitScope_Global), 0, &maxFramesPerSlice, SizeOf32(UInt32)), "couldn't set max frames per slice on AURemoteIO") {return ex}
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_MaximumFramesPerSlice), AudioUnitScope(kAudioUnitScope_Global), 0, &maxFramesPerSlice, SizeOf32(UInt32)), "couldn't set max frames per slice on AURemoteIO")
             
             // Get the property value back from AURemoteIO. We are going to use this value to allocate buffers accordingly
             var propSize = SizeOf32(UInt32)
-            if let ex=XExceptionIfError(AudioUnitGetProperty(self._rioUnit, kAudioUnitProperty_MaximumFramesPerSlice.ui, kAudioUnitScope_Global.ui, 0, &maxFramesPerSlice, &propSize), "couldn't get max frames per slice on AURemoteIO") {return ex}
+            try XExceptionIfError(AudioUnitGetProperty(self._rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFramesPerSlice, &propSize), "couldn't get max frames per slice on AURemoteIO")
             
             self._bufferManager = BufferManager(maxFramesPerSlice: Int(maxFramesPerSlice))
             self._dcRejectionFilter = DCRejectionFilter()
             
             
             // Set the render callback on AURemoteIO
-            var renderCallback = createRenderCallback(self)
-            if let ex=XExceptionIfError(AudioUnitSetProperty(self._rioUnit, kAudioUnitProperty_SetRenderCallback.ui, kAudioUnitScope_Input.ui, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO") {return ex}
+            var renderCallback = AURenderCallbackStruct(
+                inputProc: AudioController_RenderCallback,
+                inputProcRefCon: UnsafeMutablePointer(unsafeAddressOf(self))
+            )
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO")
             
             // Initialize the AURemoteIO instance
-            if let ex=XExceptionIfError(AudioUnitInitialize(self._rioUnit), "couldn't initialize AURemoteIO instance") {return ex}
-            return nil
-        }
-        
-        .catch {(e: CAXException) in
+            try XExceptionIfError(AudioUnitInitialize(self._rioUnit), "couldn't initialize AURemoteIO instance")
+        } catch let e as CAXException {
             NSLog("Error returned from setupIOUnit: %d: %@", e.mError, e.mOperation)
-            return nil
-        }
-        .catch {t in
+        } catch _ {
             NSLog("Unknown error returned from setupIOUnit")
-            return nil
-        }.done()
+        }
         
     }
     
     private func createButtonPressedSound() {
-        var error: NSError? = nil
-        
         let url = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("button_press", ofType: "caf")!)
-        _audioPlayer = AVAudioPlayer(contentsOfURL: url, error: &error)
-        
-        XFailIfError(error, "couldn't create AVAudioPlayer")
+        do {
+            _audioPlayer = try AVAudioPlayer(contentsOfURL: url)
+        } catch let error as NSError {
+            XFailIfError(error, "couldn't create AVAudioPlayer")
+            _audioPlayer = nil
+        }
         
     }
     

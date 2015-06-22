@@ -182,14 +182,14 @@ class EAGLView: UIView {
         // Set up our overlay view that pops up when we are pinching/zooming the oscilloscope
         var img_ui: UIImage? = nil
         // Draw the rounded rect for the bg path using this convenience function
-        var bgPath = EAGLView.createRoundedRectPath(CGRectMake(0, 0, 110, 234), 15.0)
+        let bgPath = EAGLView.createRoundedRectPath(CGRectMake(0, 0, 110, 234), 15.0)
         
         let cs = CGColorSpaceCreateDeviceRGB()
         // Create the bitmap context into which we will draw
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let cxt = CGBitmapContextCreate(nil, 110, 234, 8, 4*110, cs, bitmapInfo)
+        let cxt = CGBitmapContextCreate(nil, 110, 234, 8, 4*110, cs, bitmapInfo.rawValue)
         CGContextSetFillColorSpace(cxt, cs)
-        var fillClr: [CGFloat] = [0.0, 0.0, 0.0, 0.7]
+        let fillClr: [CGFloat] = [0.0, 0.0, 0.0, 0.7]
         CGContextSetFillColor(cxt, fillClr)
         // Add the rounded rect to the context...
         CGContextAddPath(cxt, bgPath)
@@ -337,23 +337,23 @@ class EAGLView: UIView {
         
         // Load our GL textures
         
-        img = UIImage(named: "oscilloscope.png")!.CGImage
+        img = UIImage(named: "oscilloscope.png")!.CGImage!
         
         self.createGLTexture(&bgTexture, fromCGImage: img)
         
-        img = UIImage(named: "fft_off.png")!.CGImage
+        img = UIImage(named: "fft_off.png")!.CGImage!
         self.createGLTexture(&fftOffTexture, fromCGImage: img)
         
-        img = UIImage(named: "fft_on.png")!.CGImage
+        img = UIImage(named: "fft_on.png")!.CGImage!
         self.createGLTexture(&fftOnTexture, fromCGImage: img)
         
-        img = UIImage(named: "mute_off.png")!.CGImage
+        img = UIImage(named: "mute_off.png")!.CGImage!
         self.createGLTexture(&muteOffTexture, fromCGImage: img)
         
-        img = UIImage(named: "mute_on.png")!.CGImage
+        img = UIImage(named: "mute_on.png")!.CGImage!
         self.createGLTexture(&muteOnTexture, fromCGImage: img)
         
-        img = UIImage(named: "sonogram.png")!.CGImage
+        img = UIImage(named: "sonogram.png")!.CGImage!
         self.createGLTexture(&sonoTexture, fromCGImage: img)
         
         initted_oscilloscope = true
@@ -582,7 +582,7 @@ class EAGLView: UIView {
         firstTex = newFirst
         
         var thisTex = firstTex
-        do {
+        repeat {
             if thisTex.memory.nextTex.memory.nextTex == nil {
                 firstTex.memory.texName = thisTex.memory.nextTex.memory.texName
                 thisTex.memory.nextTex.dealloc(1)
@@ -719,12 +719,12 @@ class EAGLView: UIView {
         }
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // If we're if waveform mode and not currently in a pinch event, and we've got two touches, start a pinch event
-        if let eventTouches = event.allTouches()
+        if let eventTouches = event!.allTouches()
             where pinchEvent == nil && eventTouches.count == 2 && displayMode == .OscilloscopeWaveform {
             pinchEvent = event
-            let t = Array(eventTouches) as! [UITouch]
+            let t = Array(eventTouches)
             lastPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
             
             let hwSampleRate = audioController.sessionSampleRate
@@ -734,13 +734,13 @@ class EAGLView: UIView {
         }
     }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // If we are in a pinch event...
-        if let eventTouches = event.allTouches()
+        if let eventTouches = event!.allTouches()
             where event == pinchEvent && eventTouches.count == 2 {
             var thisPinchDist: CGFloat
             var pinchDiff: CGFloat
-            let t = Array(eventTouches) as! [UITouch]
+            let t = Array(eventTouches)
             thisPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
             
             // Find out how far we traveled since the last event
@@ -820,7 +820,7 @@ class EAGLView: UIView {
         bzero(spriteData, texH * texW * 4)
         // Uses the bitmatp creation function provided by the Core Graphics framework.
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let spriteContext = CGBitmapContextCreate(spriteData, texW, texH, 8, texW * 4, CGImageGetColorSpace(img), bitmapInfo)
+        let spriteContext = CGBitmapContextCreate(spriteData, texW, texH, 8, texW * 4, CGImageGetColorSpace(img), bitmapInfo.rawValue)
         
         // Translate and scale the context to draw the image upside-down (conflict in flipped-ness between GL textures and CG contexts)
         CGContextTranslateCTM(spriteContext, 0.0, texH.g)
@@ -850,7 +850,7 @@ class EAGLView: UIView {
         spriteData.dealloc(Int(texH * texW * 4))
     }
     
-    override func touchesEnded(touches:Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches:Set<UITouch>, withEvent event: UIEvent?) {
         let bufferManager = audioController.bufferManagerInstance
         if event == pinchEvent {
             // If our pinch/zoom has ended, nil out the pinchEvent and remove the overlay view
@@ -871,7 +871,7 @@ class EAGLView: UIView {
         let offsetY = (self.bounds.size.height - 480) / 2
         let offsetX = (self.bounds.size.width - 320) / 2
         
-        let touch = touches.first as! UITouch
+        let touch = touches.first!
         if CGRectContainsPoint(CGRectMake(offsetX, 15.0, 52.0, 99.0), touch.locationInView(self)) { // The Sonogram button was touched
             audioController.playButtonPressedSound()
             if displayMode == .OscilloscopeWaveform || displayMode == .OscilloscopeFFT {

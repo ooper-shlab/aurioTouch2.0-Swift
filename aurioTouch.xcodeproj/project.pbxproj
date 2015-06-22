@@ -25,7 +25,6 @@
 		D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C571A7C7D2C0036AD3C /* CAXException.swift */; };
 		D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */; };
 		D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */; };
-		D7536C661A7D21710036AD3C /* AudioController+RenderCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */; };
 		D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C6A1A7D3B590036AD3C /* EAGLView.swift */; };
 		D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7536CA91A7E26030036AD3C /* ReadMe.txt */; };
 		D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */; };
@@ -57,7 +56,6 @@
 		A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A16C48350DE389CB00F4A0B3 /* oscilloscope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oscilloscope.png; sourceTree = "<group>"; };
-		D750B7241A798B8F009F8B8F /* aurioTouch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aurioTouch-Bridging-Header.h"; sourceTree = "<group>"; };
 		D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DCRejectionFilter.swift; sourceTree = "<group>"; };
 		D750B7271A798E10009F8B8F /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
 		D750B7291A7B9A90009F8B8F /* FFTHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFTHelper.swift; sourceTree = "<group>"; };
@@ -65,8 +63,6 @@
 		D7536C571A7C7D2C0036AD3C /* CAXException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAXException.swift; sourceTree = "<group>"; };
 		D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAStreamBasicDescription.swift; sourceTree = "<group>"; };
-		D7536C641A7D21580036AD3C /* AudioController+RenderCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AudioController+RenderCallback.h"; sourceTree = "<group>"; };
-		D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AudioController+RenderCallback.m"; sourceTree = "<group>"; };
 		D7536C6A1A7D3B590036AD3C /* EAGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
 		D7536CA91A7E26030036AD3C /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
@@ -110,12 +106,9 @@
 				D7536C6A1A7D3B590036AD3C /* EAGLView.swift */,
 				D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */,
 				D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */,
-				D7536C641A7D21580036AD3C /* AudioController+RenderCallback.h */,
-				D7536C651A7D21710036AD3C /* AudioController+RenderCallback.m */,
 				D750B72B1A7BA044009F8B8F /* BufferManager.swift */,
 				D750B7291A7B9A90009F8B8F /* FFTHelper.swift */,
 				D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */,
-				D750B7241A798B8F009F8B8F /* aurioTouch-Bridging-Header.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -248,7 +241,8 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "aurioTouch" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -308,7 +302,6 @@
 				D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */,
 				D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */,
 				D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */,
-				D7536C661A7D21710036AD3C /* AudioController+RenderCallback.m in Sources */,
 				D7AE536E1A85BFE20085AA3B /* CADebugMacros.swift in Sources */,
 				D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */,
 			);
@@ -341,9 +334,9 @@
 				GCC_PREFIX_HEADER = aurioTouch_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-sample.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos.internal;
-				SWIFT_OBJC_BRIDGING_HEADER = "Classes/aurioTouch-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -358,9 +351,9 @@
 				GCC_PREFIX_HEADER = aurioTouch_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-sample.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos.internal;
-				SWIFT_OBJC_BRIDGING_HEADER = "Classes/aurioTouch-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -369,6 +362,7 @@
 			buildSettings = {
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_THUMB_SUPPORT = NO;

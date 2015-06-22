@@ -73,4 +73,4 @@ func SizeOf32<T>(X: T.Type) ->UInt32 {return UInt32(strideof(T))}
 func DebugMsg(inFormat: String, args: CVarArgType...) {}
 
 //	Old-style numbered DebugMessage calls are implemented in terms of DebugMsg() now
-func DebugMessageN2(msg: String, N1: CVarArgType, N2: CVarArgType) {DebugMsg(msg, N1, N2)}
+func DebugMessageN2(msg: String, N1: CVarArgType, N2: CVarArgType) {DebugMsg(msg, args: N1, N2)}
