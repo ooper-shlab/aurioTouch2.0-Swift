@@ -141,7 +141,7 @@ class EAGLView: UIView {
     }
     
     //The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         // Set up our overlay view that pops up when we are pinching/zooming the oscilloscope
         super.init(coder: coder)
         
@@ -199,7 +199,7 @@ class EAGLView: UIView {
         // Make a CGImage out of the context
         let img_cg = CGBitmapContextCreateImage(cxt)
         // Make a UIImage out of the CGImage
-        img_ui = UIImage(CGImage: img_cg)
+        img_ui = UIImage(CGImage: img_cg!)
         
         // Create the image view to hold the background rounded rect which we just drew
         sampleSizeOverlay = UIImageView(image: img_ui)
@@ -790,7 +790,7 @@ class EAGLView: UIView {
         CGPathCloseSubpath(path)
         
         let ret = CGPathCreateCopy(path)
-        return ret
+        return ret!
     }
     
     
