@@ -118,22 +118,22 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             err = AudioUnitRender(_rioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData)
             
             // filter out the DC component of the signal
-            _dcRejectionFilter?.processInplace(AudioBufferList_getDataPtr(ioData, 0), numFrames: inNumberFrames)
+            _dcRejectionFilter?.processInplace(ioData.data(0), numFrames: inNumberFrames)
             
             // based on the current display mode, copy the required data to the buffer manager
             if _bufferManager.displayMode == .OscilloscopeWaveform {
-                _bufferManager.copyAudioDataToDrawBuffer(AudioBufferList_getDataPtr(ioData, 0), inNumFrames: Int(inNumberFrames))
+                _bufferManager.copyAudioDataToDrawBuffer(ioData.data(0), inNumFrames: Int(inNumberFrames))
                 
             } else if _bufferManager.displayMode == .Spectrum || _bufferManager.displayMode == .OscilloscopeFFT {
                 if _bufferManager.needsNewFFTData {
-                    _bufferManager.CopyAudioDataToFFTInputBuffer(AudioBufferList_getDataPtr(ioData, 0), numFrames: Int(inNumberFrames))
+                    _bufferManager.CopyAudioDataToFFTInputBuffer(ioData.data(0), numFrames: Int(inNumberFrames))
                 }
             }
             
             // mute audio if needed
             if muteAudio {
-                for i in 0..<Int(ioData.memory.mNumberBuffers) {
-                    memset(AudioBufferList_getDataPtr(ioData, 0), 0, size_t(AudioBufferList_getDataSize(ioData, index: i)))
+                for i in 0..<Int(ioData.numberBuffers) {
+                    memset(ioData.data(i), 0, ioData.byteSize(i))
                 }
             }
         }
