@@ -111,6 +111,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         inNumberFrames: UInt32,
         ioData: UnsafeMutablePointer<AudioBufferList>) -> OSStatus
     {
+        let ioPtr = UnsafeMutableAudioBufferListPointer(ioData)
         var err: OSStatus = noErr
         if !audioChainIsBeingReconstructed {
             // we are calling AudioUnitRender on the input bus of AURemoteIO
@@ -118,22 +119,22 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             err = AudioUnitRender(_rioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData)
             
             // filter out the DC component of the signal
-            _dcRejectionFilter?.processInplace(ioData.data(0), numFrames: inNumberFrames)
+            _dcRejectionFilter?.processInplace(UnsafeMutablePointer(ioPtr[0].mData), numFrames: inNumberFrames)
             
             // based on the current display mode, copy the required data to the buffer manager
             if _bufferManager.displayMode == .OscilloscopeWaveform {
-                _bufferManager.copyAudioDataToDrawBuffer(ioData.data(0), inNumFrames: Int(inNumberFrames))
+                _bufferManager.copyAudioDataToDrawBuffer(UnsafeMutablePointer(ioPtr[0].mData), inNumFrames: Int(inNumberFrames))
                 
             } else if _bufferManager.displayMode == .Spectrum || _bufferManager.displayMode == .OscilloscopeFFT {
                 if _bufferManager.needsNewFFTData {
-                    _bufferManager.CopyAudioDataToFFTInputBuffer(ioData.data(0), numFrames: Int(inNumberFrames))
+                    _bufferManager.CopyAudioDataToFFTInputBuffer(UnsafeMutablePointer(ioPtr[0].mData), numFrames: Int(inNumberFrames))
                 }
             }
             
             // mute audio if needed
             if muteAudio {
-                for i in 0..<Int(ioData.numberBuffers) {
-                    memset(ioData.data(i), 0, ioData.byteSize(i))
+                for i in 0..<ioPtr.count {
+                    memset(ioPtr[i].mData, 0, Int(ioPtr[i].mDataByteSize))
                 }
             }
         }

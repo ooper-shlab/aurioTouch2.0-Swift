@@ -28,7 +28,6 @@
 		D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C6A1A7D3B590036AD3C /* EAGLView.swift */; };
 		D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7536CA91A7E26030036AD3C /* ReadMe.txt */; };
 		D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */; };
-		D7AE53681A85B3B40085AA3B /* AudioBufferList+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */; };
 		D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */; };
 		D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */; };
 		D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */; };
@@ -66,7 +65,6 @@
 		D7536C6A1A7D3B590036AD3C /* EAGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
 		D7536CA91A7E26030036AD3C /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
-		D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AudioBufferList+.swift"; path = "OOPUtils/AudioBufferList+.swift"; sourceTree = "<group>"; };
 		D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericArithmetic.swift; path = OOPUtils/GenericArithmetic.swift; sourceTree = "<group>"; };
 		D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NumTypes+Conversion.swift"; path = "OOPUtils/NumTypes+Conversion.swift"; sourceTree = "<group>"; };
 		D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OOPExceptions.swift; path = OOPUtils/OOPExceptions.swift; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 		D7536C5D1A7CD0380036AD3C /* OOPUtils */ = {
 			isa = PBXGroup;
 			children = (
-				D7AE53631A85B3B40085AA3B /* AudioBufferList+.swift */,
 				D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */,
 				D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */,
 				D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */,
@@ -296,7 +293,6 @@
 				D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */,
 				D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */,
 				D750B7281A798E10009F8B8F /* CABitOperations.swift in Sources */,
-				D7AE53681A85B3B40085AA3B /* AudioBufferList+.swift in Sources */,
 				D750B72C1A7BA044009F8B8F /* BufferManager.swift in Sources */,
 				D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */,
 				D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */,
