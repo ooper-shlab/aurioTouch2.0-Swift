@@ -69,7 +69,7 @@ class EAGLView: UIView {
     private final let SPECTRUM_BAR_WIDTH = 4
     
     
-    func CLAMP<T: ArithmeticType>(min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
+    func CLAMP<T: Computable>(min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
     
     
     // value, a, r, g, b
@@ -277,7 +277,7 @@ class EAGLView: UIView {
     
     
     func startAnimation() {
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(animationInterval, target: self, selector: "drawView", userInfo: nil, repeats: true)
+        animationTimer = NSTimer.scheduledTimerWithTimeInterval(animationInterval, target: self, selector: #selector(EAGLView.drawView as (EAGLView) -> () -> ()), userInfo: nil, repeats: true)
         animationStarted = NSDate.timeIntervalSinceReferenceDate()
         audioController.startIOUnit()
     }
@@ -363,9 +363,11 @@ class EAGLView: UIView {
     private func clearTextures() {
         bzero(texBitBuffer, size_t(sizeof(UInt32) * 512))
         
-        for var curTex = firstTex; curTex != nil; curTex = curTex.memory.nextTex {
+        var curTex = firstTex
+        while curTex != nil {
             glBindTexture(GL_TEXTURE_2D.ui, curTex.memory.texName)
             glTexImage2D(GL_TEXTURE_2D.ui, 0, GL_RGBA, 1, 512, 0, GL_RGBA.ui, GL_UNSIGNED_BYTE.ui, texBitBuffer)
+            curTex = curTex.memory.nextTex
         }
     }
     
@@ -553,9 +555,14 @@ class EAGLView: UIView {
             drawBuffer_ptr = drawBuffers[drawBuffer_i]
             
             // Fill our vertex array with points
-            for var i: GLfloat = 0.0; i < max; ++i {
-                (oscilLine_ptr++).memory = i / max
-                (oscilLine_ptr++).memory = Float32((drawBuffer_ptr++).memory)
+            var i: GLfloat = 0.0
+            while i < max {
+                oscilLine_ptr.memory = i / max
+                oscilLine_ptr += 1
+                oscilLine_ptr.memory = Float32(drawBuffer_ptr.memory)
+                oscilLine_ptr += 1
+                drawBuffer_ptr += 1
+                i += 1.0
             }
             
             // If we're drawing the newest line, draw it in solid green. Otherwise, draw it in a faded green.
@@ -592,7 +599,7 @@ class EAGLView: UIView {
         } while thisTex != nil
     }
     
-    private func linearInterp<T: FloatArithmeticType>(valA: T, _ valB: T, _ fract: T) -> T {
+    private func linearInterp<T: FloatComputable>(valA: T, _ valB: T, _ fract: T) -> T {
         return valA + ((valB - valA) * fract)
     }
     private func linearInterpUInt8(valA: GLfloat, _ valB: GLfloat, _ fract: GLfloat) -> UInt8 {
@@ -645,7 +652,8 @@ class EAGLView: UIView {
                 
             }
             
-            (texBitBuffer_ptr++).memory = newPx
+            texBitBuffer_ptr.memory = newPx
+            texBitBuffer_ptr += 1
         }
         
         glBindTexture(GL_TEXTURE_2D.ui, firstTex.memory.texName)
@@ -694,10 +702,12 @@ class EAGLView: UIView {
         glColor4f(1.0, 1.0, 1.0, 1.0)
         
         glPushMatrix()
-        for var thisTex = firstTex; thisTex != nil; thisTex = thisTex.memory.nextTex {
+        var thisTex = firstTex
+        while thisTex != nil {
             glTranslatef(-(SPECTRUM_BAR_WIDTH).f, 0.0, 0.0)
             glBindTexture(GL_TEXTURE_2D.ui, thisTex.memory.texName)
             glDrawArrays(GL_TRIANGLE_STRIP.ui, 0, 4)
+            thisTex = thisTex.memory.nextTex
         }
         glPopMatrix()
         glPopMatrix()
@@ -761,11 +771,12 @@ class EAGLView: UIView {
     }
     
     
-    private class func createRoundedRectPath(RECT: CGRect, var _ cornerRadius: CGFloat) -> CGPath {
+    private class func createRoundedRectPath(RECT: CGRect, _ _cornerRadius: CGFloat) -> CGPath {
         let path = CGPathCreateMutable()
         
         let maxRad = max(CGRectGetHeight(RECT) / 2.0, CGRectGetWidth(RECT) / 2.0)
         
+        var cornerRadius = _cornerRadius
         if cornerRadius > maxRad {cornerRadius = maxRad}
         
         let bl = RECT.origin
@@ -799,7 +810,8 @@ class EAGLView: UIView {
         
         // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
         let drawBuffers = bufferManager.drawBuffers
-        for var drawBuffer_i = kNumDrawBuffers - 2; drawBuffer_i >= 0; drawBuffer_i-- {
+        for drawBuffer_i in (kNumDrawBuffers - 2).stride(through: 0, by: -1) {
+//        for var drawBuffer_i = kNumDrawBuffers - 2; drawBuffer_i >= 0; drawBuffer_i -= 1 {
             memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], size_t(bufferManager.currentDrawBufferLength))
         }
     }
@@ -812,8 +824,8 @@ class EAGLView: UIView {
         let imgH = CGImageGetHeight(img)
         
         // Find smallest possible powers of 2 for our texture dimensions
-        for texW = 1; texW < imgW; texW *= 2 {}
-        for texH = 1; texH < imgH; texH *= 2 {}
+        texW = 1; while texW < imgW {texW *= 2}
+        texH = 1; while texH < imgH {texH *= 2}
         
         // Allocated memory needed for the bitmap context
         let spriteData: UnsafeMutablePointer<GLubyte> = UnsafeMutablePointer.alloc(Int(texH * texW * 4))

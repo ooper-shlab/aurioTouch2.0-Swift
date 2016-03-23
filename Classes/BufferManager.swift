@@ -135,7 +135,8 @@ class BufferManager {
     
     func cycleDrawBuffers() {
         // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
-        for var drawBuffer_i = (kNumDrawBuffers - 2); drawBuffer_i>=0; drawBuffer_i-- {
+        for drawBuffer_i in (kNumDrawBuffers - 2).stride(through: 0, by: -1) {
+//        for var drawBuffer_i = (kNumDrawBuffers - 2); drawBuffer_i>=0; drawBuffer_i-- {
             memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], size_t(currentDrawBufferLength))
         }
     }

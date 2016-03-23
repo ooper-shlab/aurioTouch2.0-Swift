@@ -50,9 +50,9 @@ public class OOPThrowable: CustomStringConvertible, ErrorType {
     private(set) var line: Int
     
     init(message: String = "", cause: OOPThrowable? = nil,
-        file: String = __FILE__,
-        function: String = __FUNCTION__,
-        line: Int = __LINE__, column: Int = __COLUMN__)
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line, column: Int = #column)
     {
         self.message = message
         self.cause = cause

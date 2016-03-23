@@ -89,7 +89,7 @@ private func AudioController_RenderCallback(inRefCon: UnsafeMutablePointer<Void>
 @objc(AudioController)
 class AudioController: NSObject, AURenderCallbackDelegate {
     
-    var _rioUnit: AudioUnit = AudioUnit()
+    var _rioUnit: AudioUnit = nil
     var _bufferManager: BufferManager!
     var _dcRejectionFilter: DCRejectionFilter!
     var _audioPlayer: AVAudioPlayer?   // for button pressed sound
@@ -266,19 +266,19 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             
             // add interruption handler
             NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "handleInterruption:",
+                selector: #selector(AudioController.handleInterruption(_:)),
                 name: AVAudioSessionInterruptionNotification,
                 object: sessionInstance)
             
             // we don't do anything special in the route change notification
             NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "handleRouteChange:",
+                selector: #selector(AudioController.handleRouteChange(_:)),
                 name: AVAudioSessionRouteChangeNotification,
                 object: sessionInstance)
             
             // if media services are reset, we need to rebuild our audio chain
             NSNotificationCenter.defaultCenter().addObserver(self,
-                selector: "handleMediaServerReset:",
+                selector: #selector(AudioController.handleMediaServerReset(_:)),
                 name: AVAudioSessionMediaServicesWereResetNotification,
                 object: sessionInstance)
             
