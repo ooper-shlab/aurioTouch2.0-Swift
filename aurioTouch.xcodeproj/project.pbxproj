@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,20 +18,19 @@
 		A16C47120DE37F9E00F4A0B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */; };
 		A16C473F0DE3801700F4A0B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */; };
 		A16C48360DE389CB00F4A0B3 /* oscilloscope.png in Resources */ = {isa = PBXBuildFile; fileRef = A16C48350DE389CB00F4A0B3 /* oscilloscope.png */; };
-		D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */; };
-		D750B7281A798E10009F8B8F /* CABitOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7271A798E10009F8B8F /* CABitOperations.swift */; };
-		D750B72A1A7B9A90009F8B8F /* FFTHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B7291A7B9A90009F8B8F /* FFTHelper.swift */; };
-		D750B72C1A7BA044009F8B8F /* BufferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D750B72B1A7BA044009F8B8F /* BufferManager.swift */; };
-		D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C571A7C7D2C0036AD3C /* CAXException.swift */; };
-		D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */; };
-		D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */; };
-		D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536C6A1A7D3B590036AD3C /* EAGLView.swift */; };
-		D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = D7536CA91A7E26030036AD3C /* ReadMe.txt */; };
-		D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */; };
-		D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */; };
-		D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */; };
-		D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */; };
-		D7AE536E1A85BFE20085AA3B /* CADebugMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */; };
+		D78F4AE81D60BE7000012A69 /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */; };
+		D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */; };
+		D78F4AEA1D60BE7000012A69 /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */; };
+		D78F4AEF1D60BEAF00012A69 /* CABitOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */; };
+		D78F4AF01D60BEAF00012A69 /* CADebugMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEC1D60BEAF00012A69 /* CADebugMacros.swift */; };
+		D78F4AF11D60BEAF00012A69 /* CAStreamBasicDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AED1D60BEAF00012A69 /* CAStreamBasicDescription.swift */; };
+		D78F4AF21D60BEAF00012A69 /* CAXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEE1D60BEAF00012A69 /* CAXException.swift */; };
+		D78F4AF81D60BF3300012A69 /* FFTHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AF51D60BF3300012A69 /* FFTHelper.swift */; };
+		D78F4AFC1D60C01A00012A69 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AF91D60C01A00012A69 /* AudioController.swift */; };
+		D78F4AFD1D60C01A00012A69 /* aurioTouchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AFA1D60C01A00012A69 /* aurioTouchAppDelegate.swift */; };
+		D78F4AFE1D60C01A00012A69 /* EAGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AFB1D60C01A00012A69 /* EAGLView.swift */; };
+		D78F4AFF1D60C05500012A69 /* BufferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AF31D60BF3300012A69 /* BufferManager.swift */; };
+		D79AEF1C1D60C37E00584688 /* DCRejectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79AEF1B1D60C37E00584688 /* DCRejectionFilter.swift */; };
 		F7CF73110EB1258D0099AA71 /* sonogram.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73100EB1258D0099AA71 /* sonogram.png */; };
 		F7CF73160EB126740099AA71 /* fft_off.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73120EB126740099AA71 /* fft_off.png */; };
 		F7CF73170EB126740099AA71 /* fft_on.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CF73130EB126740099AA71 /* fft_on.png */; };
@@ -48,6 +47,7 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2B40B59318873E0600F4A921 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		2B71304618EB80A800DA9374 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2B869E111D51590F00995BDC /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
 		2B86B2B118F35C2300347397 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		8250CD56145B602D00806437 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
@@ -55,21 +55,21 @@
 		A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A16C48350DE389CB00F4A0B3 /* oscilloscope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oscilloscope.png; sourceTree = "<group>"; };
-		D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DCRejectionFilter.swift; sourceTree = "<group>"; };
-		D750B7271A798E10009F8B8F /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
-		D750B7291A7B9A90009F8B8F /* FFTHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFTHelper.swift; sourceTree = "<group>"; };
-		D750B72B1A7BA044009F8B8F /* BufferManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferManager.swift; sourceTree = "<group>"; };
-		D7536C571A7C7D2C0036AD3C /* CAXException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAXException.swift; sourceTree = "<group>"; };
-		D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
-		D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAStreamBasicDescription.swift; sourceTree = "<group>"; };
-		D7536C6A1A7D3B590036AD3C /* EAGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
-		D7536CA91A7E26030036AD3C /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
-		D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
-		D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericArithmetic.swift; path = OOPUtils/GenericArithmetic.swift; sourceTree = "<group>"; };
-		D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NumTypes+Conversion.swift"; path = "OOPUtils/NumTypes+Conversion.swift"; sourceTree = "<group>"; };
-		D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OOPExceptions.swift; path = OOPUtils/OOPExceptions.swift; sourceTree = "<group>"; };
-		D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CADebugMacros.swift; sourceTree = "<group>"; };
-		D7AE536F1A85CB240085AA3B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericArithmetic.swift; sourceTree = "<group>"; };
+		D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumTypes+Conversion.swift"; sourceTree = "<group>"; };
+		D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPExceptions.swift; sourceTree = "<group>"; };
+		D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
+		D78F4AEC1D60BEAF00012A69 /* CADebugMacros.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CADebugMacros.swift; sourceTree = "<group>"; };
+		D78F4AED1D60BEAF00012A69 /* CAStreamBasicDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAStreamBasicDescription.swift; sourceTree = "<group>"; };
+		D78F4AEE1D60BEAF00012A69 /* CAXException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAXException.swift; sourceTree = "<group>"; };
+		D78F4AF31D60BF3300012A69 /* BufferManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferManager.swift; sourceTree = "<group>"; };
+		D78F4AF51D60BF3300012A69 /* FFTHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFTHelper.swift; sourceTree = "<group>"; };
+		D78F4AF91D60C01A00012A69 /* AudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
+		D78F4AFA1D60C01A00012A69 /* aurioTouchAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aurioTouchAppDelegate.swift; sourceTree = "<group>"; };
+		D78F4AFB1D60C01A00012A69 /* EAGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
+		D79AEF171D60C2F200584688 /* README2.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README2.md; sourceTree = "<group>"; };
+		D79AEF181D60C2F200584688 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D79AEF1B1D60C37E00584688 /* DCRejectionFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DCRejectionFilter.swift; sourceTree = "<group>"; };
 		F7CF73100EB1258D0099AA71 /* sonogram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sonogram.png; sourceTree = "<group>"; };
 		F7CF73120EB126740099AA71 /* fft_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fft_off.png; sourceTree = "<group>"; };
 		F7CF73130EB126740099AA71 /* fft_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fft_on.png; sourceTree = "<group>"; };
@@ -101,12 +101,12 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D7536C6A1A7D3B590036AD3C /* EAGLView.swift */,
-				D7662A9A1A7E591A007EB12F /* aurioTouchAppDelegate.swift */,
-				D7536C5B1A7CCE6D0036AD3C /* AudioController.swift */,
-				D750B72B1A7BA044009F8B8F /* BufferManager.swift */,
-				D750B7291A7B9A90009F8B8F /* FFTHelper.swift */,
-				D750B7251A798B90009F8B8F /* DCRejectionFilter.swift */,
+				D79AEF1B1D60C37E00584688 /* DCRejectionFilter.swift */,
+				D78F4AFB1D60C01A00012A69 /* EAGLView.swift */,
+				D78F4AFA1D60C01A00012A69 /* aurioTouchAppDelegate.swift */,
+				D78F4AF91D60C01A00012A69 /* AudioController.swift */,
+				D78F4AF31D60BF3300012A69 /* BufferManager.swift */,
+				D78F4AF51D60BF3300012A69 /* FFTHelper.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -122,8 +122,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				D7AE536F1A85CB240085AA3B /* README.md */,
-				D7536CA91A7E26030036AD3C /* ReadMe.txt */,
+				D79AEF171D60C2F200584688 /* README2.md */,
+				D79AEF181D60C2F200584688 /* LICENSE.txt */,
+				2B869E111D51590F00995BDC /* ReadMe.md */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -136,8 +137,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D7536C5D1A7CD0380036AD3C /* OOPUtils */,
 				F74ADD0E0DDA24AA0046BEC2 /* PublicUtility */,
+				D78F4AE41D60BE7000012A69 /* OOPUtils */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -170,23 +171,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D7536C5D1A7CD0380036AD3C /* OOPUtils */ = {
+		D78F4AE41D60BE7000012A69 /* OOPUtils */ = {
 			isa = PBXGroup;
 			children = (
-				D7AE53651A85B3B40085AA3B /* GenericArithmetic.swift */,
-				D7AE53661A85B3B40085AA3B /* NumTypes+Conversion.swift */,
-				D7AE53671A85B3B40085AA3B /* OOPExceptions.swift */,
+				D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */,
+				D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */,
+				D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */,
 			);
-			name = OOPUtils;
+			path = OOPUtils;
 			sourceTree = "<group>";
 		};
 		F74ADD0E0DDA24AA0046BEC2 /* PublicUtility */ = {
 			isa = PBXGroup;
 			children = (
-				D750B7271A798E10009F8B8F /* CABitOperations.swift */,
-				D7AE536D1A85BFE20085AA3B /* CADebugMacros.swift */,
-				D7536C571A7C7D2C0036AD3C /* CAXException.swift */,
-				D7536C601A7D04D10036AD3C /* CAStreamBasicDescription.swift */,
+				D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */,
+				D78F4AEC1D60BEAF00012A69 /* CADebugMacros.swift */,
+				D78F4AEE1D60BEAF00012A69 /* CAXException.swift */,
+				D78F4AED1D60BEAF00012A69 /* CAStreamBasicDescription.swift */,
 			);
 			path = PublicUtility;
 			sourceTree = "<group>";
@@ -238,7 +239,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0800;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
@@ -247,7 +247,7 @@
 				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "aurioTouch" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -278,7 +278,6 @@
 				F7CF73110EB1258D0099AA71 /* sonogram.png in Resources */,
 				F7CF73160EB126740099AA71 /* fft_off.png in Resources */,
 				2B86B2B218F35C2300347397 /* MainWindow.xib in Resources */,
-				D7536CAA1A7E26030036AD3C /* ReadMe.txt in Resources */,
 				F7CF73170EB126740099AA71 /* fft_on.png in Resources */,
 				F7CF73180EB126740099AA71 /* mute_off.png in Resources */,
 				F7CF73190EB126740099AA71 /* mute_on.png in Resources */,
@@ -292,19 +291,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D750B72A1A7B9A90009F8B8F /* FFTHelper.swift in Sources */,
-				D7536C581A7C7D2C0036AD3C /* CAXException.swift in Sources */,
-				D7536C611A7D04D10036AD3C /* CAStreamBasicDescription.swift in Sources */,
-				D750B7261A798B90009F8B8F /* DCRejectionFilter.swift in Sources */,
-				D7AE536B1A85B3B40085AA3B /* NumTypes+Conversion.swift in Sources */,
-				D750B7281A798E10009F8B8F /* CABitOperations.swift in Sources */,
-				D750B72C1A7BA044009F8B8F /* BufferManager.swift in Sources */,
-				D7AE536C1A85B3B40085AA3B /* OOPExceptions.swift in Sources */,
-				D7536C5C1A7CCE6D0036AD3C /* AudioController.swift in Sources */,
-				D7AE536A1A85B3B40085AA3B /* GenericArithmetic.swift in Sources */,
-				D7536C6B1A7D3B590036AD3C /* EAGLView.swift in Sources */,
-				D7AE536E1A85BFE20085AA3B /* CADebugMacros.swift in Sources */,
-				D7662A9B1A7E591A007EB12F /* aurioTouchAppDelegate.swift in Sources */,
+				D78F4AFE1D60C01A00012A69 /* EAGLView.swift in Sources */,
+				D78F4AF11D60BEAF00012A69 /* CAStreamBasicDescription.swift in Sources */,
+				D78F4AFC1D60C01A00012A69 /* AudioController.swift in Sources */,
+				D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */,
+				D78F4AF21D60BEAF00012A69 /* CAXException.swift in Sources */,
+				D78F4AFD1D60C01A00012A69 /* aurioTouchAppDelegate.swift in Sources */,
+				D78F4AE81D60BE7000012A69 /* GenericArithmetic.swift in Sources */,
+				D78F4AF81D60BF3300012A69 /* FFTHelper.swift in Sources */,
+				D78F4AFF1D60C05500012A69 /* BufferManager.swift in Sources */,
+				D78F4AEF1D60BEAF00012A69 /* CABitOperations.swift in Sources */,
+				D79AEF1C1D60C37E00584688 /* DCRejectionFilter.swift in Sources */,
+				D78F4AEA1D60BE7000012A69 /* OOPExceptions.swift in Sources */,
+				D78F4AF01D60BEAF00012A69 /* CADebugMacros.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +392,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -430,7 +429,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 			};
