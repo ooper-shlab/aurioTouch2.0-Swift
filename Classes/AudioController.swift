@@ -61,27 +61,27 @@ import AVFoundation
 
 
 @objc protocol AURenderCallbackDelegate {
-    func performRender(ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+    func performRender(_ ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
         inTimeStamp: UnsafePointer<AudioTimeStamp>,
         inBufNumber: UInt32,
         inNumberFrames: UInt32,
         ioData: UnsafeMutablePointer<AudioBufferList>) -> OSStatus
 }
 
-private func AudioController_RenderCallback(inRefCon: UnsafeMutablePointer<Void>,
-        ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
-        inTimeStamp: UnsafePointer<AudioTimeStamp>,
-        inBufNumber: UInt32,
-        inNumberFrames: UInt32,
-        ioData: UnsafeMutablePointer<AudioBufferList>)
+private let AudioController_RenderCallback: AURenderCallback = {(inRefCon,
+        ioActionFlags/*: UnsafeMutablePointer<AudioUnitRenderActionFlags>*/,
+        inTimeStamp/*: UnsafePointer<AudioTimeStamp>*/,
+        inBufNumber/*: UInt32*/,
+        inNumberFrames/*: UInt32*/,
+        ioData/*: UnsafeMutablePointer<AudioBufferList>*/)
     -> OSStatus
-{
-    let delegate = unsafeBitCast(inRefCon, AURenderCallbackDelegate.self)
+in
+    let delegate = unsafeBitCast(inRefCon, to: AURenderCallbackDelegate.self)
     let result = delegate.performRender(ioActionFlags,
         inTimeStamp: inTimeStamp,
         inBufNumber: inBufNumber,
         inNumberFrames: inNumberFrames,
-        ioData: ioData)
+        ioData: ioData!)
     return result
 }
 
@@ -89,7 +89,7 @@ private func AudioController_RenderCallback(inRefCon: UnsafeMutablePointer<Void>
 @objc(AudioController)
 class AudioController: NSObject, AURenderCallbackDelegate {
     
-    var _rioUnit: AudioUnit = nil
+    var _rioUnit: AudioUnit? = nil
     var _bufferManager: BufferManager!
     var _dcRejectionFilter: DCRejectionFilter!
     var _audioPlayer: AVAudioPlayer?   // for button pressed sound
@@ -98,14 +98,14 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     private(set) var audioChainIsBeingReconstructed: Bool = false
     
     enum aurioTouchDisplayMode {
-        case OscilloscopeWaveform
-        case OscilloscopeFFT
-        case Spectrum
+        case oscilloscopeWaveform
+        case oscilloscopeFFT
+        case spectrum
     }
     
     // Render callback function
     func performRender(
-        ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+        _ ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
         inTimeStamp: UnsafePointer<AudioTimeStamp>,
         inBufNumber: UInt32,
         inNumberFrames: UInt32,
@@ -116,18 +116,18 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         if !audioChainIsBeingReconstructed {
             // we are calling AudioUnitRender on the input bus of AURemoteIO
             // this will store the audio data captured by the microphone in ioData
-            err = AudioUnitRender(_rioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData)
+            err = AudioUnitRender(_rioUnit!, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData)
             
             // filter out the DC component of the signal
-            _dcRejectionFilter?.processInplace(UnsafeMutablePointer(ioPtr[0].mData), numFrames: inNumberFrames)
+            _dcRejectionFilter?.processInplace(UnsafeMutablePointer(ioPtr[0].mData!), numFrames: inNumberFrames)
             
             // based on the current display mode, copy the required data to the buffer manager
-            if _bufferManager.displayMode == .OscilloscopeWaveform {
+            if _bufferManager.displayMode == .oscilloscopeWaveform {
                 _bufferManager.copyAudioDataToDrawBuffer(UnsafeMutablePointer(ioPtr[0].mData), inNumFrames: Int(inNumberFrames))
                 
-            } else if _bufferManager.displayMode == .Spectrum || _bufferManager.displayMode == .OscilloscopeFFT {
+            } else if _bufferManager.displayMode == .spectrum || _bufferManager.displayMode == .oscilloscopeFFT {
                 if _bufferManager.needsNewFFTData {
-                    _bufferManager.CopyAudioDataToFFTInputBuffer(UnsafeMutablePointer(ioPtr[0].mData), numFrames: Int(inNumberFrames))
+                    _bufferManager.CopyAudioDataToFFTInputBuffer(UnsafeMutablePointer(ioPtr[0].mData!), numFrames: Int(inNumberFrames))
                 }
             }
             
@@ -152,16 +152,16 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     
-    func handleInterruption(notification: NSNotification) {
+    func handleInterruption(_ notification: Notification) {
 //        do {
-            let theInterruptionType = notification.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
-            NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.Began.rawValue ? "Begin Interruption" : "End Interruption")
+            let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
+            NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
             
-            if theInterruptionType == AVAudioSessionInterruptionType.Began.rawValue {
+            if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
                 self.stopIOUnit()
             }
             
-            if theInterruptionType == AVAudioSessionInterruptionType.Ended.rawValue {
+            if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
                 // make sure to activate the session
                 do {
                     try AVAudioSession.sharedInstance().setActive(true)
@@ -179,29 +179,29 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     
-    func handleRouteChange(notification: NSNotification) {
-        let reasonValue = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-        let routeDescription = notification.userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription?
+    func handleRouteChange(_ notification: Notification) {
+        let reasonValue = (notification as NSNotification).userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        let routeDescription = (notification as NSNotification).userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription?
         
         NSLog("Route change:")
         if let reason = AVAudioSessionRouteChangeReason(rawValue: reasonValue) {
             switch reason {
-            case .NewDeviceAvailable:
+            case .newDeviceAvailable:
                 NSLog("     NewDeviceAvailable")
-            case .OldDeviceUnavailable:
+            case .oldDeviceUnavailable:
                 NSLog("     OldDeviceUnavailable")
-            case .CategoryChange:
+            case .categoryChange:
                 NSLog("     CategoryChange")
                 NSLog(" New Category: %@", AVAudioSession.sharedInstance().category)
-            case .Override:
+            case .override:
                 NSLog("     Override")
-            case .WakeFromSleep:
+            case .wakeFromSleep:
                 NSLog("     WakeFromSleep")
-            case .NoSuitableRouteForCategory:
+            case .noSuitableRouteForCategory:
                 NSLog("     NoSuitableRouteForCategory")
-            case .RouteConfigurationChange:
+            case .routeConfigurationChange:
                 NSLog("     RouteConfigurationChange")
-            case .Unknown:
+            case .unknown:
                 NSLog("     Unknown")
             }
         } else {
@@ -214,7 +214,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         }
     }
     
-    func handleMediaServerReset(notification: NSNotification) {
+    func handleMediaServerReset(_ notification: Notification) {
         NSLog("Media server has reset")
         audioChainIsBeingReconstructed = true
         
@@ -246,7 +246,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             }
             
             // set the buffer duration to 5 ms
-            let bufferDuration: NSTimeInterval = 0.005
+            let bufferDuration: TimeInterval = 0.005
             do {
                 try sessionInstance.setPreferredIOBufferDuration(bufferDuration)
             } catch let error as NSError {
@@ -265,21 +265,21 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             }
             
             // add interruption handler
-            NSNotificationCenter.defaultCenter().addObserver(self,
+            NotificationCenter.default.addObserver(self,
                 selector: #selector(AudioController.handleInterruption(_:)),
-                name: AVAudioSessionInterruptionNotification,
+                name: NSNotification.Name.AVAudioSessionInterruption,
                 object: sessionInstance)
             
             // we don't do anything special in the route change notification
-            NSNotificationCenter.defaultCenter().addObserver(self,
+            NotificationCenter.default.addObserver(self,
                 selector: #selector(AudioController.handleRouteChange(_:)),
-                name: AVAudioSessionRouteChangeNotification,
+                name: NSNotification.Name.AVAudioSessionRouteChange,
                 object: sessionInstance)
             
             // if media services are reset, we need to rebuild our audio chain
-            NSNotificationCenter.defaultCenter().addObserver(self,
+            NotificationCenter.default.addObserver(self,
                 selector: #selector(AudioController.handleMediaServerReset(_:)),
-                name: AVAudioSessionMediaServicesWereResetNotification,
+                name: NSNotification.Name.AVAudioSessionMediaServicesWereReset,
                 object: sessionInstance)
             
             do {
@@ -311,31 +311,31 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 componentFlagsMask: 0)
             
             let comp = AudioComponentFindNext(nil, &desc)
-            try XExceptionIfError(AudioComponentInstanceNew(comp, &self._rioUnit), "couldn't create a new instance of AURemoteIO")
+            try XExceptionIfError(AudioComponentInstanceNew(comp!, &self._rioUnit), "couldn't create a new instance of AURemoteIO")
             
             //  Enable input and output on AURemoteIO
             //  Input is enabled on the input scope of the input element
             //  Output is enabled on the output scope of the output element
             
             var one: UInt32 = 1
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Input), 1, &one, SizeOf32(one)), "could not enable input on AURemoteIO")
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Output), 0, &one, SizeOf32(one)), "could not enable output on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Input), 1, &one, SizeOf32(one)), "could not enable input on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, AudioUnitPropertyID(kAudioOutputUnitProperty_EnableIO), AudioUnitScope(kAudioUnitScope_Output), 0, &one, SizeOf32(one)), "could not enable output on AURemoteIO")
             
             // Explicitly set the input and output client formats
             // sample rate = 44100, num channels = 1, format = 32 bit floating point
             
-            var ioFormat = CAStreamBasicDescription(sampleRate: 44100, numChannels: 1, pcmf: .Float32, isInterleaved: false)
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Output), 1, &ioFormat, SizeOf32(ioFormat)), "couldn't set the input client format on AURemoteIO")
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Input), 0, &ioFormat, SizeOf32(ioFormat)), "couldn't set the output client format on AURemoteIO")
+            var ioFormat = CAStreamBasicDescription(sampleRate: 44100, numChannels: 1, pcmf: .float32, isInterleaved: false)
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Output), 1, &ioFormat, SizeOf32(ioFormat)), "couldn't set the input client format on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, AudioUnitPropertyID(kAudioUnitProperty_StreamFormat), AudioUnitScope(kAudioUnitScope_Input), 0, &ioFormat, SizeOf32(ioFormat)), "couldn't set the output client format on AURemoteIO")
             
             // Set the MaximumFramesPerSlice property. This property is used to describe to an audio unit the maximum number
             // of samples it will be asked to produce on any single given call to AudioUnitRender
             var maxFramesPerSlice: UInt32 = 4096
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, AudioUnitPropertyID(kAudioUnitProperty_MaximumFramesPerSlice), AudioUnitScope(kAudioUnitScope_Global), 0, &maxFramesPerSlice, SizeOf32(UInt32)), "couldn't set max frames per slice on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, AudioUnitPropertyID(kAudioUnitProperty_MaximumFramesPerSlice), AudioUnitScope(kAudioUnitScope_Global), 0, &maxFramesPerSlice, SizeOf32(UInt32.self)), "couldn't set max frames per slice on AURemoteIO")
             
             // Get the property value back from AURemoteIO. We are going to use this value to allocate buffers accordingly
-            var propSize = SizeOf32(UInt32)
-            try XExceptionIfError(AudioUnitGetProperty(self._rioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFramesPerSlice, &propSize), "couldn't get max frames per slice on AURemoteIO")
+            var propSize = SizeOf32(UInt32.self)
+            try XExceptionIfError(AudioUnitGetProperty(self._rioUnit!, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFramesPerSlice, &propSize), "couldn't get max frames per slice on AURemoteIO")
             
             self._bufferManager = BufferManager(maxFramesPerSlice: Int(maxFramesPerSlice))
             self._dcRejectionFilter = DCRejectionFilter()
@@ -344,12 +344,12 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             // Set the render callback on AURemoteIO
             var renderCallback = AURenderCallbackStruct(
                 inputProc: AudioController_RenderCallback,
-                inputProcRefCon: UnsafeMutablePointer(unsafeAddressOf(self))
+                inputProcRefCon: UnsafeMutablePointer(unsafeAddress(of: self))
             )
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO")
             
             // Initialize the AURemoteIO instance
-            try XExceptionIfError(AudioUnitInitialize(self._rioUnit), "couldn't initialize AURemoteIO instance")
+            try XExceptionIfError(AudioUnitInitialize(self._rioUnit!), "couldn't initialize AURemoteIO instance")
         } catch let e as CAXException {
             NSLog("Error returned from setupIOUnit: %d: %@", e.mError, e.mOperation)
         } catch _ {
@@ -359,9 +359,9 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     private func createButtonPressedSound() {
-        let url = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("button_press", ofType: "caf")!)
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: "button_press", ofType: "caf")!)
         do {
-            _audioPlayer = try AVAudioPlayer(contentsOfURL: url)
+            _audioPlayer = try AVAudioPlayer(contentsOf: url)
         } catch let error as NSError {
             XFailIfError(error, "couldn't create AVAudioPlayer")
             _audioPlayer = nil
@@ -379,14 +379,16 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         self.createButtonPressedSound()
     }
     
+    @discardableResult
     func startIOUnit() -> OSStatus {
-        let err = AudioOutputUnitStart(_rioUnit)
+        let err = AudioOutputUnitStart(_rioUnit!)
         if err != 0 {NSLog("couldn't start AURemoteIO: %d", Int32(err))}
         return err
     }
     
+    @discardableResult
     func stopIOUnit() -> OSStatus {
-        let err = AudioOutputUnitStop(_rioUnit)
+        let err = AudioOutputUnitStop(_rioUnit!)
         if err != 0 {NSLog("couldn't stop AURemoteIO: %d", Int32(err))}
         return err
     }

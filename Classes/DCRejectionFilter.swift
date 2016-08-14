@@ -68,7 +68,7 @@ class DCRejectionFilter {
     private final let kDefaultPoleDist: Float32 = 0.975
 
     
-    func processInplace(ioData: UnsafeMutablePointer<Float32>, numFrames: UInt32) {
+    func processInplace(_ ioData: UnsafeMutablePointer<Float32>, numFrames: UInt32) {
         for i in 0..<Int(numFrames) {
             let xCurr = ioData[i]
             ioData[i] = ioData[i] - mX1 + (kDefaultPoleDist * mY1)

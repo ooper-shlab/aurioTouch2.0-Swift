@@ -62,8 +62,8 @@ import Accelerate
 
 class FFTHelper {
     
-    private var mSpectrumAnalysis: FFTSetup
-    private var mDspSplitComplex: DSPSplitComplex = DSPSplitComplex(realp: nil, imagp: nil)
+    private var mSpectrumAnalysis: FFTSetup?
+    private var mDspSplitComplex: DSPSplitComplex
     private var mFFTNormFactor: Float32
     private var mFFTLength: vDSP_Length
     private var mLog2N: vDSP_Length
@@ -77,27 +77,29 @@ class FFTHelper {
         mFFTNormFactor = 1.0/Float32(2*inMaxFramesPerSlice)
         mFFTLength = vDSP_Length(inMaxFramesPerSlice)/2
         mLog2N = vDSP_Length(log2Ceil(UInt32(inMaxFramesPerSlice)))
-        mDspSplitComplex.realp = UnsafeMutablePointer.alloc(Int(mFFTLength))
-        mDspSplitComplex.imagp = UnsafeMutablePointer.alloc(Int(mFFTLength))
+        mDspSplitComplex = DSPSplitComplex(
+            realp: UnsafeMutablePointer.allocate(capacity: Int(mFFTLength)),
+            imagp: UnsafeMutablePointer.allocate(capacity: Int(mFFTLength))
+        )
         mSpectrumAnalysis = vDSP_create_fftsetup(mLog2N, FFTRadix(kFFTRadix2))
     }
     
     
     deinit {
         vDSP_destroy_fftsetup(mSpectrumAnalysis)
-        mDspSplitComplex.realp.dealloc(mFFTLength.l)
-        mDspSplitComplex.imagp.dealloc(mFFTLength.l)
+        mDspSplitComplex.realp.deallocate(capacity: mFFTLength.l)
+        mDspSplitComplex.imagp.deallocate(capacity: mFFTLength.l)
     }
     
     
-    func computeFFT(inAudioData: UnsafePointer<Float32>, outFFTData: UnsafeMutablePointer<Float32>) {
+    func computeFFT(_ inAudioData: UnsafePointer<Float32>?, outFFTData: UnsafeMutablePointer<Float32>?) {
         if inAudioData == nil || outFFTData == nil { return }
         
         //Generate a split complex vector from the real data
-        vDSP_ctoz(UnsafePointer(inAudioData), 2, &mDspSplitComplex, 1, mFFTLength)
+        vDSP_ctoz(UnsafePointer(inAudioData!), 2, &mDspSplitComplex, 1, mFFTLength)
         
         //Take the fft and scale appropriately
-        vDSP_fft_zrip(mSpectrumAnalysis, &mDspSplitComplex, 1, mLog2N, FFTDirection(kFFTDirection_Forward))
+        vDSP_fft_zrip(mSpectrumAnalysis!, &mDspSplitComplex, 1, mLog2N, FFTDirection(kFFTDirection_Forward))
         vDSP_vsmul(mDspSplitComplex.realp, 1, &mFFTNormFactor, mDspSplitComplex.realp, 1, mFFTLength)
         vDSP_vsmul(mDspSplitComplex.imagp, 1, &mFFTNormFactor, mDspSplitComplex.imagp, 1, mFFTLength)
         
@@ -105,11 +107,11 @@ class FFTHelper {
         mDspSplitComplex.imagp[0] = 0.0
         
         //Convert the fft data to dB
-        vDSP_zvmags(&mDspSplitComplex, 1, outFFTData, 1, mFFTLength)
+        vDSP_zvmags(&mDspSplitComplex, 1, outFFTData!, 1, mFFTLength)
         
         //In order to avoid taking log10 of zero, an adjusting factor is added in to make the minimum value equal -128dB
-        vDSP_vsadd(outFFTData, 1, &kAdjust0DB, outFFTData, 1, mFFTLength)
+        vDSP_vsadd(outFFTData!, 1, &kAdjust0DB, outFFTData!, 1, mFFTLength)
         var one: Float32 = 1
-        vDSP_vdbcon(outFFTData, 1, &one, outFFTData, 1, mFFTLength, 0)
+        vDSP_vdbcon(outFFTData!, 1, &one, outFFTData!, 1, mFFTLength, 0)
     }
 }

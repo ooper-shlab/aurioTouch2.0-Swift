@@ -37,7 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Foundation
 
-public class OOPThrowable: CustomStringConvertible, ErrorType {
+public class OOPThrowable: CustomStringConvertible, Error {
     public var _domain: String = "OOPThrowable"
     public var _code: Int = 0
     
@@ -61,7 +61,7 @@ public class OOPThrowable: CustomStringConvertible, ErrorType {
         self.line = line
     }
     
-    func initCause(cause: OOPThrowable) {
+    func initCause(_ cause: OOPThrowable) {
         if self.cause != nil {
             fatalError("cause already set")
         }

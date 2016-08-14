@@ -68,7 +68,7 @@ class BufferManager {
     var displayMode: AudioController.aurioTouchDisplayMode
     
     
-    private(set) var drawBuffers: UnsafeMutablePointer<UnsafeMutablePointer<Float32>>
+    private(set) var drawBuffers: UnsafeMutablePointer<UnsafeMutablePointer<Float32>?>
     
     var currentDrawBufferLength: Int
     
@@ -79,7 +79,7 @@ class BufferManager {
     
     private var mDrawBufferIndex: Int
     
-    private var mFFTInputBuffer: UnsafeMutablePointer<Float32>
+    private var mFFTInputBuffer: UnsafeMutablePointer<Float32>?
     private var mFFTInputBufferFrameIndex: Int
     private var mFFTInputBufferLen: Int
     private var mHasNewFFTData: Int32   //volatile
@@ -89,8 +89,8 @@ class BufferManager {
     
     
     init(maxFramesPerSlice inMaxFramesPerSlice: Int) {
-        displayMode = .OscilloscopeWaveform
-        drawBuffers = UnsafeMutablePointer.alloc(Int(kNumDrawBuffers))
+        displayMode = .oscilloscopeWaveform
+        drawBuffers = UnsafeMutablePointer.allocate(capacity: Int(kNumDrawBuffers))
         mDrawBufferIndex = 0
         currentDrawBufferLength = kDefaultDrawSamples
         mFFTInputBuffer = nil
@@ -99,10 +99,10 @@ class BufferManager {
         mHasNewFFTData = 0
         mNeedsNewFFTData = 0
         for i in 0..<kNumDrawBuffers {
-            drawBuffers[Int(i)] = UnsafeMutablePointer.alloc(Int(inMaxFramesPerSlice))
+            drawBuffers[Int(i)] = UnsafeMutablePointer.allocate(capacity: Int(inMaxFramesPerSlice))
         }
         
-        mFFTInputBuffer = UnsafeMutablePointer.alloc(Int(inMaxFramesPerSlice))
+        mFFTInputBuffer = UnsafeMutablePointer.allocate(capacity: Int(inMaxFramesPerSlice))
         mFFTHelper = FFTHelper(maxFramesPerSlice: inMaxFramesPerSlice)
         OSAtomicIncrement32Barrier(&mNeedsNewFFTData)
     }
@@ -110,16 +110,16 @@ class BufferManager {
     
     deinit {
         for i in 0..<kNumDrawBuffers {
-            drawBuffers[Int(i)].dealloc(mFFTInputBufferLen)
+            drawBuffers[Int(i)]?.deallocate(capacity: mFFTInputBufferLen)
             drawBuffers[Int(i)] = nil
         }
-        drawBuffers.dealloc(kNumDrawBuffers)
+        drawBuffers.deallocate(capacity: kNumDrawBuffers)
         
-        mFFTInputBuffer.dealloc(mFFTInputBufferLen)
+        mFFTInputBuffer?.deallocate(capacity: mFFTInputBufferLen)
     }
     
     
-    func copyAudioDataToDrawBuffer(inData: UnsafePointer<Float32>, inNumFrames: Int) {
+    func copyAudioDataToDrawBuffer(_ inData: UnsafePointer<Float32>?, inNumFrames: Int) {
         if inData == nil { return }
         
         for i in 0..<inNumFrames {
@@ -127,7 +127,7 @@ class BufferManager {
                 cycleDrawBuffers()
                 mDrawBufferIndex = -i
             }
-            drawBuffers[0][i + mDrawBufferIndex] = inData[i]
+            drawBuffers[0]?[i + mDrawBufferIndex] = (inData?[i])!
         }
         mDrawBufferIndex += inNumFrames
     }
@@ -135,17 +135,16 @@ class BufferManager {
     
     func cycleDrawBuffers() {
         // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
-        for drawBuffer_i in (kNumDrawBuffers - 2).stride(through: 0, by: -1) {
-//        for var drawBuffer_i = (kNumDrawBuffers - 2); drawBuffer_i>=0; drawBuffer_i-- {
+        for drawBuffer_i in stride(from: (kNumDrawBuffers - 2), through: 0, by: -1) {
             memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], size_t(currentDrawBufferLength))
         }
     }
     
     
-    func CopyAudioDataToFFTInputBuffer(inData: UnsafePointer<Float32>, numFrames: Int) {
+    func CopyAudioDataToFFTInputBuffer(_ inData: UnsafePointer<Float32>, numFrames: Int) {
         let framesToCopy = min(numFrames, mFFTInputBufferLen - mFFTInputBufferFrameIndex)
-        memcpy(mFFTInputBuffer.advancedBy(mFFTInputBufferFrameIndex), inData, size_t(framesToCopy * sizeof(Float32)))
-        mFFTInputBufferFrameIndex += framesToCopy * sizeof(Float32)
+        memcpy(mFFTInputBuffer?.advanced(by: mFFTInputBufferFrameIndex), inData, size_t(framesToCopy * sizeof(Float32.self)))
+        mFFTInputBufferFrameIndex += framesToCopy * sizeof(Float32.self)
         if mFFTInputBufferFrameIndex >= mFFTInputBufferLen {
             OSAtomicIncrement32(&mHasNewFFTData)
             OSAtomicDecrement32(&mNeedsNewFFTData)
@@ -153,7 +152,7 @@ class BufferManager {
     }
     
     
-    func GetFFTOutput(outFFTData: UnsafeMutablePointer<Float32>) {
+    func GetFFTOutput(_ outFFTData: UnsafeMutablePointer<Float32>) {
         mFFTHelper.computeFFT(mFFTInputBuffer, outFFTData: outFFTData)
         mFFTInputBufferFrameIndex = 0
         OSAtomicDecrement32Barrier(&mHasNewFFTData)

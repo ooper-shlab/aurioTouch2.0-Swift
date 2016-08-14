@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import UIKit
 
 //GLboolean, Boolean
-extension UInt8: BooleanLiteralConvertible, BooleanType {
+extension UInt8: ExpressibleByBooleanLiteral {
     public var boolValue: Bool {
         return self != 0
     }
@@ -47,7 +47,7 @@ extension UInt8: BooleanLiteralConvertible, BooleanType {
     }
 }
 //GLint
-extension Int32: BooleanLiteralConvertible {
+extension Int32: ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: BooleanLiteralType) {
         self = value ? Int32(1) : Int32(0)
     }

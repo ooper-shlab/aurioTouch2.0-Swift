@@ -55,12 +55,12 @@
 import Foundation
 
 // return whether a number is a power of two
-func isPowerOfTwo(x: UInt32) -> Bool {
+func isPowerOfTwo(_ x: UInt32) -> Bool {
     return (x & (x-1)) == 0
 }
 
 // count the leading zeros in a word
-func countLeadingZeroes(arg: UInt32) -> UInt32 {
+func countLeadingZeroes(_ arg: UInt32) -> UInt32 {
     var bitMask: Int32 = -0x8000_0000
     for i in 0..<32 {
         if UInt32(bitPattern: bitMask) & arg != 0 {
@@ -72,6 +72,6 @@ func countLeadingZeroes(arg: UInt32) -> UInt32 {
 }
 
 // base 2 log of next power of two greater or equal to x
-func log2Ceil(x: UInt32) -> UInt32 {
+func log2Ceil(_ x: UInt32) -> UInt32 {
     return 32 - countLeadingZeroes(x - 1);
 }

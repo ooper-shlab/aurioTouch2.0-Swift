@@ -69,7 +69,7 @@ class EAGLView: UIView {
     private final let SPECTRUM_BAR_WIDTH = 4
     
     
-    func CLAMP<T: Computable>(min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
+    func CLAMP<T: Computable>(_ min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
     
     
     // value, a, r, g, b
@@ -87,7 +87,7 @@ class EAGLView: UIView {
     
     struct SpectrumLinkedTexture {
         var texName: GLuint
-        var nextTex: UnsafeMutablePointer<SpectrumLinkedTexture>
+        var nextTex: UnsafeMutablePointer<SpectrumLinkedTexture>?
     }
     
     
@@ -104,16 +104,16 @@ class EAGLView: UIView {
     /* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
     private var depthRenderbuffer: GLuint = 0
     
-    private var animationTimer: NSTimer?
-    private var animationInterval: NSTimeInterval = 0
-    private var animationStarted: NSTimeInterval = 0
+    private var animationTimer: Timer?
+    private var animationInterval: TimeInterval = 0
+    private var animationStarted: TimeInterval = 0
     
     private var sampleSizeOverlay: UIImageView!
     private var sampleSizeText: UILabel!
     
     private var initted_oscilloscope: Bool = false
     private var initted_spectrum: Bool = false
-    private var texBitBuffer: UnsafeMutablePointer<UInt32> =  UnsafeMutablePointer.alloc(512)
+    private var texBitBuffer: UnsafeMutablePointer<UInt32> =  UnsafeMutablePointer.allocate(capacity: 512)
     private var spectrumRect: CGRect = CGRect()
     
     private var bgTexture: GLuint = 0
@@ -123,20 +123,20 @@ class EAGLView: UIView {
     private var fftOnTexture: GLuint = 0
     private var sonoTexture: GLuint = 0
     
-    private var displayMode: AudioController.aurioTouchDisplayMode = .OscilloscopeFFT
+    private var displayMode: AudioController.aurioTouchDisplayMode = .oscilloscopeFFT
     
-    private var firstTex: UnsafeMutablePointer<SpectrumLinkedTexture> = nil
+    private var firstTex: UnsafeMutablePointer<SpectrumLinkedTexture>? = nil
     
     private var pinchEvent: UIEvent?
     private var lastPinchDist: CGFloat = 0.0
-    private var l_fftData: UnsafeMutablePointer<Float32> = nil
-    private var oscilLine: UnsafeMutablePointer<GLfloat> = nil
+    private var l_fftData: UnsafeMutablePointer<Float32>!
+    private var oscilLine: UnsafeMutablePointer<GLfloat>!
     
     private var audioController: AudioController = AudioController()
     
     
     // You must implement this
-    override class func layerClass() -> AnyClass {
+    override class var layerClass: AnyClass {
         return CAEAGLLayer.self
     }
     
@@ -145,75 +145,75 @@ class EAGLView: UIView {
         // Set up our overlay view that pops up when we are pinching/zooming the oscilloscope
         super.init(coder: coder)
         
-        self.frame = UIScreen.mainScreen().bounds
+        self.frame = UIScreen.main.bounds
         
         // Get the layer
         let eaglLayer = self.layer as! CAEAGLLayer
         
-        eaglLayer.opaque = true
+        eaglLayer.isOpaque = true
         
         eaglLayer.drawableProperties = [
             kEAGLDrawablePropertyRetainedBacking : false,
             kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8,
         ]
         
-        context = EAGLContext(API: .OpenGLES1)
+        context = EAGLContext(api: .openGLES1)
         
-        if context == nil || !EAGLContext.setCurrentContext(context) || !self.createFramebuffer() {
+        if context == nil || !EAGLContext.setCurrent(context) || !self.createFramebuffer() {
             fatalError("cannot initialize EAGLView")
         }
         
         // Enable multi touch so we can handle pinch and zoom in the oscilloscope
-        self.multipleTouchEnabled = true
+        self.isMultipleTouchEnabled = true
         
-        l_fftData = UnsafeMutablePointer.alloc(audioController.bufferManagerInstance.FFTOutputBufferLength)
-        bzero(l_fftData, size_t(audioController.bufferManagerInstance.FFTOutputBufferLength * sizeof(Float32)))
+        l_fftData = UnsafeMutablePointer.allocate(capacity: audioController.bufferManagerInstance.FFTOutputBufferLength)
+        bzero(l_fftData, size_t(audioController.bufferManagerInstance.FFTOutputBufferLength * sizeof(Float32.self)))
         
-        oscilLine = UnsafeMutablePointer.alloc(kDefaultDrawSamples * 2)
-        bzero(oscilLine, size_t(kDefaultDrawSamples * 2 * sizeof(GLfloat)))
+        oscilLine = UnsafeMutablePointer.allocate(capacity: kDefaultDrawSamples * 2)
+        bzero(oscilLine, size_t(kDefaultDrawSamples * 2 * sizeof(GLfloat.self)))
         
         animationInterval = 1.0 / 60.0
         
         self.setupView()
         self.drawView()
         
-        displayMode = .OscilloscopeWaveform
+        displayMode = .oscilloscopeWaveform
         
         // Set up our overlay view that pops up when we are pinching/zooming the oscilloscope
         var img_ui: UIImage? = nil
         // Draw the rounded rect for the bg path using this convenience function
-        let bgPath = EAGLView.createRoundedRectPath(CGRectMake(0, 0, 110, 234), 15.0)
+        let bgPath = EAGLView.createRoundedRectPath(CGRect(x: 0, y: 0, width: 110, height: 234), 15.0)
         
         let cs = CGColorSpaceCreateDeviceRGB()
         // Create the bitmap context into which we will draw
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let cxt = CGBitmapContextCreate(nil, 110, 234, 8, 4*110, cs, bitmapInfo.rawValue)
-        CGContextSetFillColorSpace(cxt, cs)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        let cxt = CGContext(data: nil, width: 110, height: 234, bitsPerComponent: 8, bytesPerRow: 4*110, space: cs, bitmapInfo: bitmapInfo.rawValue)
+        cxt?.setFillColorSpace(cs)
         let fillClr: [CGFloat] = [0.0, 0.0, 0.0, 0.7]
-        CGContextSetFillColor(cxt, fillClr)
+        cxt?.setFillColor(fillClr)
         // Add the rounded rect to the context...
-        CGContextAddPath(cxt, bgPath)
+        cxt?.addPath(bgPath)
         // ... and fill it.
-        CGContextFillPath(cxt)
+        cxt?.fillPath()
         
         // Make a CGImage out of the context
-        let img_cg = CGBitmapContextCreateImage(cxt)
+        let img_cg = cxt?.makeImage()
         // Make a UIImage out of the CGImage
-        img_ui = UIImage(CGImage: img_cg!)
+        img_ui = UIImage(cgImage: img_cg!)
         
         // Create the image view to hold the background rounded rect which we just drew
         sampleSizeOverlay = UIImageView(image: img_ui)
-        sampleSizeOverlay.frame = CGRectMake(190, 124, 110, 234)
+        sampleSizeOverlay.frame = CGRect(x: 190, y: 124, width: 110, height: 234)
         
         // Create the text view which shows the size of our oscilloscope window as we pinch/zoom
-        sampleSizeText = UILabel(frame: CGRectMake(-62, 0, 234, 234))
-        sampleSizeText.textAlignment = NSTextAlignment.Center
-        sampleSizeText.textColor = UIColor.whiteColor()
+        sampleSizeText = UILabel(frame: CGRect(x: -62, y: 0, width: 234, height: 234))
+        sampleSizeText.textAlignment = NSTextAlignment.center
+        sampleSizeText.textColor = UIColor.white
         sampleSizeText.text = "0000 ms"
-        sampleSizeText.font = UIFont.boldSystemFontOfSize(36.0)
+        sampleSizeText.font = UIFont.boldSystemFont(ofSize: 36.0)
         // Rotate the text view since we want the text to draw top to bottom (when the device is oriented vertically)
-        sampleSizeText.transform = CGAffineTransformMakeRotation(M_PI_2.g)
-        sampleSizeText.backgroundColor = UIColor.clearColor()
+        sampleSizeText.transform = CGAffineTransform(rotationAngle: M_PI_2.g)
+        sampleSizeText.backgroundColor = UIColor.clear
         
         // Add the text view as a subview of the overlay BG
         sampleSizeOverlay.addSubview(sampleSizeText)
@@ -229,19 +229,20 @@ class EAGLView: UIView {
     }
     
     override func layoutSubviews() {
-        EAGLContext.setCurrentContext(context)
+        EAGLContext.setCurrent(context)
         self.destroyFramebuffer()
         self.createFramebuffer()
         self.drawView()
     }
     
+    @discardableResult
     private func createFramebuffer() -> Bool {
         glGenFramebuffersOES(1, &viewFramebuffer)
         glGenRenderbuffersOES(1, &viewRenderbuffer)
         
         glBindFramebufferOES(GL_FRAMEBUFFER_OES.ui, viewFramebuffer)
         glBindRenderbufferOES(GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
-        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, fromDrawable: self.layer as! EAGLDrawable)
+        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, from: self.layer as! EAGLDrawable)
         glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES.ui, GL_COLOR_ATTACHMENT0_OES.ui, GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
         
         glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES.ui, GL_RENDERBUFFER_WIDTH_OES.ui, &backingWidth)
@@ -277,8 +278,8 @@ class EAGLView: UIView {
     
     
     func startAnimation() {
-        animationTimer = NSTimer.scheduledTimerWithTimeInterval(animationInterval, target: self, selector: #selector(EAGLView.drawView as (EAGLView) -> () -> ()), userInfo: nil, repeats: true)
-        animationStarted = NSDate.timeIntervalSinceReferenceDate()
+        animationTimer = Timer.scheduledTimer(timeInterval: animationInterval, target: self, selector: #selector(EAGLView.drawView as (EAGLView) -> () -> ()), userInfo: nil, repeats: true)
+        animationStarted = Date.timeIntervalSinceReferenceDate
         audioController.startIOUnit()
     }
     
@@ -290,7 +291,7 @@ class EAGLView: UIView {
     }
     
     
-    private func setAnimationInterval(interval: NSTimeInterval) {
+    private func setAnimationInterval(_ interval: TimeInterval) {
         animationInterval = interval
         
         if animationTimer != nil {
@@ -322,10 +323,10 @@ class EAGLView: UIView {
         if self.applicationResignedActive { return }
         
         // Make sure that you are drawing to the current context
-        EAGLContext.setCurrentContext(context)
+        EAGLContext.setCurrent(context)
         
         glBindFramebufferOES(GL_FRAMEBUFFER_OES.ui, viewFramebuffer)
-        self.drawView(self, forTime: NSDate.timeIntervalSinceReferenceDate() - animationStarted)
+        self.drawView(self, forTime: Date.timeIntervalSinceReferenceDate - animationStarted)
         
         glBindRenderbufferOES(GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
         context.presentRenderbuffer(GL_RENDERBUFFER_OES.l)
@@ -337,23 +338,23 @@ class EAGLView: UIView {
         
         // Load our GL textures
         
-        img = UIImage(named: "oscilloscope.png")!.CGImage!
+        img = UIImage(named: "oscilloscope.png")!.cgImage!
         
         self.createGLTexture(&bgTexture, fromCGImage: img)
         
-        img = UIImage(named: "fft_off.png")!.CGImage!
+        img = UIImage(named: "fft_off.png")!.cgImage!
         self.createGLTexture(&fftOffTexture, fromCGImage: img)
         
-        img = UIImage(named: "fft_on.png")!.CGImage!
+        img = UIImage(named: "fft_on.png")!.cgImage!
         self.createGLTexture(&fftOnTexture, fromCGImage: img)
         
-        img = UIImage(named: "mute_off.png")!.CGImage!
+        img = UIImage(named: "mute_off.png")!.cgImage!
         self.createGLTexture(&muteOffTexture, fromCGImage: img)
         
-        img = UIImage(named: "mute_on.png")!.CGImage!
+        img = UIImage(named: "mute_on.png")!.cgImage!
         self.createGLTexture(&muteOnTexture, fromCGImage: img)
         
-        img = UIImage(named: "sonogram.png")!.CGImage!
+        img = UIImage(named: "sonogram.png")!.cgImage!
         self.createGLTexture(&sonoTexture, fromCGImage: img)
         
         initted_oscilloscope = true
@@ -361,25 +362,25 @@ class EAGLView: UIView {
     
     
     private func clearTextures() {
-        bzero(texBitBuffer, size_t(sizeof(UInt32) * 512))
+        bzero(texBitBuffer, size_t(sizeof(UInt32.self) * 512))
         
         var curTex = firstTex
         while curTex != nil {
-            glBindTexture(GL_TEXTURE_2D.ui, curTex.memory.texName)
+            glBindTexture(GL_TEXTURE_2D.ui, (curTex?.pointee.texName)!)
             glTexImage2D(GL_TEXTURE_2D.ui, 0, GL_RGBA, 1, 512, 0, GL_RGBA.ui, GL_UNSIGNED_BYTE.ui, texBitBuffer)
-            curTex = curTex.memory.nextTex
+            curTex = curTex?.pointee.nextTex
         }
     }
     
     private func setupViewForSpectrum() {
         glClearColor(0.0, 0.0, 0.0, 0.0)
         
-        spectrumRect = CGRectMake(10.0, 10.0, 460.0, 300.0)
+        spectrumRect = CGRect(x: 10.0, y: 10.0, width: 460.0, height: 300.0)
         
         // The bit buffer for the texture needs to be 512 pixels, because OpenGL textures are powers of
         // two in either dimensions. Our texture is drawing a strip of 300 vertical pixels on the screen,
         // so we need to step up to 512 (the nearest power of 2 greater than 300).
-        texBitBuffer = UnsafeMutablePointer.alloc(512)
+        texBitBuffer = UnsafeMutablePointer.allocate(capacity: 512)
         
         // Clears the view with black
         glClearColor(0.0, 0.0, 0.0, 1.0)
@@ -387,30 +388,30 @@ class EAGLView: UIView {
         glEnableClientState(GL_VERTEX_ARRAY.ui)
         glEnableClientState(GL_TEXTURE_COORD_ARRAY.ui)
         
-        let texCount = Int(ceil(CGRectGetWidth(spectrumRect) / CGFloat(SPECTRUM_BAR_WIDTH)))
+        let texCount = Int(ceil(spectrumRect.width / CGFloat(SPECTRUM_BAR_WIDTH)))
         var texNames: UnsafeMutablePointer<GLuint>
         
-        texNames = UnsafeMutablePointer.alloc(texCount)
+        texNames = UnsafeMutablePointer.allocate(capacity: texCount)
         glGenTextures(GLsizei(texCount), texNames)
         
-        var curTex: UnsafeMutablePointer<SpectrumLinkedTexture> = nil
-        firstTex = UnsafeMutablePointer.alloc(1)
-        firstTex.memory.texName = texNames[0]
-        firstTex.memory.nextTex = nil
+        var curTex: UnsafeMutablePointer<SpectrumLinkedTexture>? = nil
+        firstTex = UnsafeMutablePointer.allocate(capacity: 1)
+        firstTex?.pointee.texName = texNames[0]
+        firstTex?.pointee.nextTex = nil
         curTex = firstTex
         
-        bzero(texBitBuffer, size_t(sizeof(UInt32) * 512))
+        bzero(texBitBuffer, size_t(sizeof(UInt32.self) * 512))
         
-        glBindTexture(GL_TEXTURE_2D.ui, curTex.memory.texName)
+        glBindTexture(GL_TEXTURE_2D.ui, (curTex?.pointee.texName)!)
         glTexParameteri(GL_TEXTURE_2D.ui, GL_TEXTURE_MIN_FILTER.ui, GL_NEAREST)
         
         for i in 1..<texCount {
-            curTex.memory.nextTex = UnsafeMutablePointer.alloc(1)
-            curTex = curTex.memory.nextTex
-            curTex.memory.texName = texNames[i]
-            curTex.memory.nextTex = nil
+            curTex?.pointee.nextTex = UnsafeMutablePointer.allocate(capacity: 1)
+            curTex = curTex?.pointee.nextTex
+            curTex?.pointee.texName = texNames[i]
+            curTex?.pointee.nextTex = nil
             
-            glBindTexture(GL_TEXTURE_2D.ui, curTex.memory.texName)
+            glBindTexture(GL_TEXTURE_2D.ui, (curTex?.pointee.texName)!)
             glTexParameteri(GL_TEXTURE_2D.ui, GL_TEXTURE_MIN_FILTER.ui, GL_NEAREST)
         }
         
@@ -423,7 +424,7 @@ class EAGLView: UIView {
         
         initted_spectrum = true
         
-        texNames.dealloc(texCount)
+        texNames.deallocate(capacity: texCount)
     }
     
     private func drawOscilloscope() {
@@ -496,13 +497,13 @@ class EAGLView: UIView {
         glBindTexture(GL_TEXTURE_2D.ui, audioController.muteAudio ? muteOnTexture : muteOffTexture)
         glDrawArrays(GL_TRIANGLE_STRIP.ui, 0, 4)
         glTranslatef(105 + offsetX, 0, 0)
-        glBindTexture(GL_TEXTURE_2D.ui, (displayMode == .OscilloscopeFFT) ? fftOnTexture : fftOffTexture)
+        glBindTexture(GL_TEXTURE_2D.ui, (displayMode == .oscilloscopeFFT) ? fftOnTexture : fftOffTexture)
         glDrawArrays(GL_TRIANGLE_STRIP.ui, 0, 4)
         glPopMatrix()
         
         let bufferManager = audioController.bufferManagerInstance
         let drawBuffers = bufferManager.drawBuffers
-        if displayMode == .OscilloscopeFFT {
+        if displayMode == .oscilloscopeFFT {
             if bufferManager.hasNewFFTData {
                 bufferManager.GetFFTOutput(l_fftData)
                 
@@ -523,7 +524,7 @@ class EAGLView: UIView {
                     let fft_r_fl = CGFloat(l_fftData[upperIndex] + 80) / 64.0
                     let interpVal = fft_l_fl * (1.0 - CGFloat(fftIdx_f)) + fft_r_fl * CGFloat(fftIdx_f)
                     
-                    drawBuffers[0][y] = Float32(CLAMP(0.0, interpVal, 1.0))
+                    drawBuffers[0]?[y] = Float32(CLAMP(0.0, interpVal, 1.0))
                 }
                 self.cycleOscilloscopeLines()
             }
@@ -552,14 +553,14 @@ class EAGLView: UIView {
             if drawBuffers[drawBuffer_i] == nil { continue }
             
             oscilLine_ptr = oscilLine
-            drawBuffer_ptr = drawBuffers[drawBuffer_i]
+            drawBuffer_ptr = drawBuffers[drawBuffer_i]!
             
             // Fill our vertex array with points
             var i: GLfloat = 0.0
             while i < max {
-                oscilLine_ptr.memory = i / max
+                oscilLine_ptr.pointee = i / max
                 oscilLine_ptr += 1
-                oscilLine_ptr.memory = Float32(drawBuffer_ptr.memory)
+                oscilLine_ptr.pointee = Float32(drawBuffer_ptr.pointee)
                 oscilLine_ptr += 1
                 drawBuffer_ptr += 1
                 i += 1.0
@@ -584,25 +585,25 @@ class EAGLView: UIView {
     
     private func cycleSpectrum() {
         var newFirst: UnsafeMutablePointer<SpectrumLinkedTexture>
-        newFirst = UnsafeMutablePointer.alloc(1)
-        newFirst.memory.nextTex = firstTex
+        newFirst = UnsafeMutablePointer.allocate(capacity: 1)
+        newFirst.pointee.nextTex = firstTex
         firstTex = newFirst
         
         var thisTex = firstTex
         repeat {
-            if thisTex.memory.nextTex.memory.nextTex == nil {
-                firstTex.memory.texName = thisTex.memory.nextTex.memory.texName
-                thisTex.memory.nextTex.dealloc(1)
-                thisTex.memory.nextTex = nil
+            if thisTex?.pointee.nextTex?.pointee.nextTex == nil {
+                firstTex?.pointee.texName = (thisTex?.pointee.nextTex?.pointee.texName)!
+                thisTex?.pointee.nextTex?.deallocate(capacity: 1)
+                thisTex?.pointee.nextTex = nil
             }
-            thisTex = thisTex.memory.nextTex
+            thisTex = thisTex?.pointee.nextTex
         } while thisTex != nil
     }
     
-    private func linearInterp<T: FloatComputable>(valA: T, _ valB: T, _ fract: T) -> T {
+    private func linearInterp<T: FloatComputable>(_ valA: T, _ valB: T, _ fract: T) -> T {
         return valA + ((valB - valA) * fract)
     }
-    private func linearInterpUInt8(valA: GLfloat, _ valB: GLfloat, _ fract: GLfloat) -> UInt8 {
+    private func linearInterpUInt8(_ valA: GLfloat, _ valB: GLfloat, _ fract: GLfloat) -> UInt8 {
         return UInt8(255.0 * linearInterp(valA, valB, fract))
     }
     
@@ -613,7 +614,7 @@ class EAGLView: UIView {
         
         let numLevels = colorLevels.count
         
-        let maxY = Int(CGRectGetHeight(spectrumRect))
+        let maxY = Int(spectrumRect.height)
         let bufferManager = audioController.bufferManagerInstance
         let fftLength = bufferManager.FFTOutputBufferLength
         for y in 0..<maxY {
@@ -652,11 +653,11 @@ class EAGLView: UIView {
                 
             }
             
-            texBitBuffer_ptr.memory = newPx
+            texBitBuffer_ptr.pointee = newPx
             texBitBuffer_ptr += 1
         }
         
-        glBindTexture(GL_TEXTURE_2D.ui, firstTex.memory.texName)
+        glBindTexture(GL_TEXTURE_2D.ui, (firstTex?.pointee.texName)!)
         glTexImage2D(GL_TEXTURE_2D.ui, 0, GL_RGBA, 1, 512, 0, GL_RGBA.ui, GL_UNSIGNED_BYTE.ui, texBitBuffer)
     }
     
@@ -705,9 +706,9 @@ class EAGLView: UIView {
         var thisTex = firstTex
         while thisTex != nil {
             glTranslatef(-(SPECTRUM_BAR_WIDTH).f, 0.0, 0.0)
-            glBindTexture(GL_TEXTURE_2D.ui, thisTex.memory.texName)
+            glBindTexture(GL_TEXTURE_2D.ui, (thisTex?.pointee.texName)!)
             glDrawArrays(GL_TRIANGLE_STRIP.ui, 0, 4)
-            thisTex = thisTex.memory.nextTex
+            thisTex = thisTex?.pointee.nextTex
         }
         glPopMatrix()
         glPopMatrix()
@@ -717,25 +718,27 @@ class EAGLView: UIView {
     }
     
     
-    private func drawView(sender: AnyObject, forTime time: NSTimeInterval) {
+    private func drawView(_ sender: AnyObject, forTime time: TimeInterval) {
         if !audioController.audioChainIsBeingReconstructed {  //hold off on drawing until the audio chain has been reconstructed
-            if displayMode == .OscilloscopeWaveform || displayMode == .OscilloscopeFFT {
+            if displayMode == .oscilloscopeWaveform || displayMode == .oscilloscopeFFT {
                 if !initted_oscilloscope { self.setupViewForOscilloscope() }
                 self.drawOscilloscope()
-            } else if displayMode == .Spectrum {
+            } else if displayMode == .spectrum {
                 if !initted_spectrum { self.setupViewForSpectrum() }
                 self.drawSpectrum()
             }
         }
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // If we're if waveform mode and not currently in a pinch event, and we've got two touches, start a pinch event
-        if let eventTouches = event!.allTouches()
-            where pinchEvent == nil && eventTouches.count == 2 && displayMode == .OscilloscopeWaveform {
+        if
+            let eventTouches = event!.allTouches,
+            pinchEvent == nil && eventTouches.count == 2 && displayMode == .oscilloscopeWaveform
+        {
             pinchEvent = event
             let t = Array(eventTouches)
-            lastPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
+            lastPinchDist = fabs(t[0].location(in: self).x - t[1].location(in: self).x)
             
             let hwSampleRate = audioController.sessionSampleRate
             let bufferManager = audioController.bufferManagerInstance
@@ -744,14 +747,16 @@ class EAGLView: UIView {
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         // If we are in a pinch event...
-        if let eventTouches = event!.allTouches()
-            where event == pinchEvent && eventTouches.count == 2 {
+        if
+            let eventTouches = event!.allTouches,
+            event == pinchEvent && eventTouches.count == 2
+        {
             var thisPinchDist: CGFloat
             var pinchDiff: CGFloat
             let t = Array(eventTouches)
-            thisPinchDist = fabs(t[0].locationInView(self).x - t[1].locationInView(self).x)
+            thisPinchDist = fabs(t[0].location(in: self).x - t[1].location(in: self).x)
             
             // Find out how far we traveled since the last event
             pinchDiff = thisPinchDist - lastPinchDist
@@ -771,10 +776,10 @@ class EAGLView: UIView {
     }
     
     
-    private class func createRoundedRectPath(RECT: CGRect, _ _cornerRadius: CGFloat) -> CGPath {
-        let path = CGPathCreateMutable()
+    private class func createRoundedRectPath(_ RECT: CGRect, _ _cornerRadius: CGFloat) -> CGPath {
+        let path = CGMutablePath()
         
-        let maxRad = max(CGRectGetHeight(RECT) / 2.0, CGRectGetWidth(RECT) / 2.0)
+        let maxRad = max(RECT.height / 2.0, RECT.width / 2.0)
         
         var cornerRadius = _cornerRadius
         if cornerRadius > maxRad {cornerRadius = maxRad}
@@ -789,18 +794,18 @@ class EAGLView: UIView {
         tr.x += RECT.size.width
         br.x += RECT.size.width
         
-        CGPathMoveToPoint(path, nil, bl.x + cornerRadius, bl.y)
-        CGPathAddArcToPoint(path, nil, bl.x, bl.y, bl.x, bl.y + cornerRadius, cornerRadius)
-        CGPathAddLineToPoint(path, nil, tl.x, tl.y - cornerRadius)
-        CGPathAddArcToPoint(path, nil, tl.x, tl.y, tl.x + cornerRadius, tl.y, cornerRadius)
-        CGPathAddLineToPoint(path, nil, tr.x - cornerRadius, tr.y)
-        CGPathAddArcToPoint(path, nil, tr.x, tr.y, tr.x, tr.y - cornerRadius, cornerRadius)
-        CGPathAddLineToPoint(path, nil, br.x, br.y + cornerRadius)
-        CGPathAddArcToPoint(path, nil, br.x, br.y, br.x - cornerRadius, br.y, cornerRadius)
+        path.moveTo(nil, x: bl.x + cornerRadius, y: bl.y)
+        path.addArc(nil, x1: bl.x, y1: bl.y, x2: bl.x, y2: bl.y + cornerRadius, radius: cornerRadius)
+        path.addLineTo(nil, x: tl.x, y: tl.y - cornerRadius)
+        path.addArc(nil, x1: tl.x, y1: tl.y, x2: tl.x + cornerRadius, y2: tl.y, radius: cornerRadius)
+        path.addLineTo(nil, x: tr.x - cornerRadius, y: tr.y)
+        path.addArc(nil, x1: tr.x, y1: tr.y, x2: tr.x, y2: tr.y - cornerRadius, radius: cornerRadius)
+        path.addLineTo(nil, x: br.x, y: br.y + cornerRadius)
+        path.addArc(nil, x1: br.x, y1: br.y, x2: br.x - cornerRadius, y2: br.y, radius: cornerRadius)
         
-        CGPathCloseSubpath(path)
+        path.closeSubpath()
         
-        let ret = CGPathCreateCopy(path)
+        let ret = path.copy()
         return ret!
     }
     
@@ -810,36 +815,36 @@ class EAGLView: UIView {
         
         // Cycle the lines in our draw buffer so that they age and fade. The oldest line is discarded.
         let drawBuffers = bufferManager.drawBuffers
-        for drawBuffer_i in (kNumDrawBuffers - 2).stride(through: 0, by: -1) {
+        for drawBuffer_i in stride(from: (kNumDrawBuffers - 2), through: 0, by: -1) {
 //        for var drawBuffer_i = kNumDrawBuffers - 2; drawBuffer_i >= 0; drawBuffer_i -= 1 {
             memmove(drawBuffers[drawBuffer_i + 1], drawBuffers[drawBuffer_i], size_t(bufferManager.currentDrawBufferLength))
         }
     }
     
     
-    private func createGLTexture(inout texName: GLuint, fromCGImage img: CGImage) {
+    private func createGLTexture(_ texName: inout GLuint, fromCGImage img: CGImage) {
         var texW: size_t, texH: size_t
         
-        let imgW = CGImageGetWidth(img)
-        let imgH = CGImageGetHeight(img)
+        let imgW = img.width
+        let imgH = img.height
         
         // Find smallest possible powers of 2 for our texture dimensions
         texW = 1; while texW < imgW {texW *= 2}
         texH = 1; while texH < imgH {texH *= 2}
         
         // Allocated memory needed for the bitmap context
-        let spriteData: UnsafeMutablePointer<GLubyte> = UnsafeMutablePointer.alloc(Int(texH * texW * 4))
+        let spriteData: UnsafeMutablePointer<GLubyte> = UnsafeMutablePointer.allocate(capacity: Int(texH * texW * 4))
         bzero(spriteData, texH * texW * 4)
         // Uses the bitmatp creation function provided by the Core Graphics framework.
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let spriteContext = CGBitmapContextCreate(spriteData, texW, texH, 8, texW * 4, CGImageGetColorSpace(img), bitmapInfo.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let spriteContext = CGContext(data: spriteData, width: texW, height: texH, bitsPerComponent: 8, bytesPerRow: texW * 4, space: img.colorSpace!, bitmapInfo: bitmapInfo.rawValue)
         
         // Translate and scale the context to draw the image upside-down (conflict in flipped-ness between GL textures and CG contexts)
-        CGContextTranslateCTM(spriteContext, 0.0, texH.g)
-        CGContextScaleCTM(spriteContext, 1.0, -1.0)
+        spriteContext?.translateBy(x: 0.0, y: texH.g)
+        spriteContext?.scaleBy(x: 1.0, y: -1.0)
         
         // After you create the context, you can draw the sprite image to the context.
-        CGContextDrawImage(spriteContext, CGRectMake(0.0, 0.0, imgW.g, imgH.g), img)
+        spriteContext?.draw(in: CGRect(x: 0.0, y: 0.0, width: imgW.g, height: imgH.g), image: img)
         // You don't need the context at this point, so you need to release it to avoid memory leaks.
         
         // Use OpenGL ES to generate a name for the texture.
@@ -859,10 +864,10 @@ class EAGLView: UIView {
         // Enable blending
         glEnable(GL_BLEND.ui)
         
-        spriteData.dealloc(Int(texH * texW * 4))
+        spriteData.deallocate(capacity: Int(texH * texW * 4))
     }
     
-    override func touchesEnded(touches:Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches:Set<UITouch>, with event: UIEvent?) {
         let bufferManager = audioController.bufferManagerInstance
         if event == pinchEvent {
             // If our pinch/zoom has ended, nil out the pinchEvent and remove the overlay view
@@ -872,9 +877,9 @@ class EAGLView: UIView {
         }
         
         // any tap in sonogram view will exit back to the waveform
-        if displayMode == .Spectrum {
+        if displayMode == .spectrum {
             audioController.playButtonPressedSound()
-            displayMode = .OscilloscopeWaveform
+            displayMode = .oscilloscopeWaveform
             bufferManager.displayMode = displayMode
             return
         }
@@ -884,22 +889,22 @@ class EAGLView: UIView {
         let offsetX = (self.bounds.size.width - 320) / 2
         
         let touch = touches.first!
-        if CGRectContainsPoint(CGRectMake(offsetX, 15.0, 52.0, 99.0), touch.locationInView(self)) { // The Sonogram button was touched
+        if CGRect(x: offsetX, y: 15.0, width: 52.0, height: 99.0).contains(touch.location(in: self)) { // The Sonogram button was touched
             audioController.playButtonPressedSound()
-            if displayMode == .OscilloscopeWaveform || displayMode == .OscilloscopeFFT {
+            if displayMode == .oscilloscopeWaveform || displayMode == .oscilloscopeFFT {
                 if !initted_spectrum { self.setupViewForSpectrum() }
                 self.clearTextures()
-                displayMode = .Spectrum
+                displayMode = .spectrum
                 bufferManager.displayMode = displayMode
             }
-        } else if CGRectContainsPoint(CGRectMake(offsetX, offsetY + 105.0, 52.0, 99.0), touch.locationInView(self)) { // The Mute button was touched
+        } else if CGRect(x: offsetX, y: offsetY + 105.0, width: 52.0, height: 99.0).contains(touch.location(in: self)) { // The Mute button was touched
             audioController.playButtonPressedSound()
             audioController.muteAudio = !audioController.muteAudio
             return
-        } else if CGRectContainsPoint(CGRectMake(offsetX, offsetY + 210, 52.0, 99.0), touch.locationInView(self)) { // The FFT button was touched
+        } else if CGRect(x: offsetX, y: offsetY + 210, width: 52.0, height: 99.0).contains(touch.location(in: self)) { // The FFT button was touched
             audioController.playButtonPressedSound()
-            displayMode = (displayMode == .OscilloscopeWaveform) ? .OscilloscopeFFT :
-                .OscilloscopeWaveform
+            displayMode = (displayMode == .oscilloscopeWaveform) ? .oscilloscopeFFT :
+                .oscilloscopeWaveform
             bufferManager.displayMode = displayMode
             return
         }
@@ -909,18 +914,18 @@ class EAGLView: UIView {
     deinit {
         self.stopAnimation()
         
-        if EAGLContext.currentContext() === context {
-            EAGLContext.setCurrentContext(nil)
+        if EAGLContext.current() === context {
+            EAGLContext.setCurrent(nil)
         }
         
-        oscilLine.dealloc(kDefaultDrawSamples * 2)
+        oscilLine?.deallocate(capacity: kDefaultDrawSamples * 2)
         //###
-        l_fftData.dealloc(audioController.bufferManagerInstance.FFTOutputBufferLength)
-        texBitBuffer.dealloc(512)
+        l_fftData?.deallocate(capacity: audioController.bufferManagerInstance.FFTOutputBufferLength)
+        texBitBuffer.deallocate(capacity: 512)
         var texPtr = firstTex
         while texPtr != nil {
-            let nextPtr = texPtr.memory.nextTex
-            texPtr.dealloc(1)
+            let nextPtr = texPtr?.pointee.nextTex
+            texPtr?.deallocate(capacity: 1)
             texPtr = nextPtr
         }
         

@@ -65,8 +65,8 @@ class aurioTouchAppDelegate: NSObject, UIApplicationDelegate {
     
     //MARK:-
     
-    func applicationDidFinishLaunching(application: UIApplication) {
-        let screenBounds = UIScreen.mainScreen().bounds
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        let screenBounds = UIScreen.main.bounds
         window = UIWindow(frame: screenBounds)
         
         let myVC = UIViewController(nibName: nil, bundle: nil)
@@ -75,27 +75,27 @@ class aurioTouchAppDelegate: NSObject, UIApplicationDelegate {
         self.window?.rootViewController = myVC
         
         // Turn off the idle timer, since this app doesn't rely on constant touch input
-        application.idleTimerDisabled = true
+        application.isIdleTimerDisabled = true
         
         window?.makeKeyAndVisible()
     }
     
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         //start animation now that we're in the foreground
         view.applicationResignedActive = false
         view.startAnimation()
     }
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         //stop animation before going into background
         view.applicationResignedActive = true
         view.stopAnimation()
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
     }
     
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
     }
     
     

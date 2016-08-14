@@ -59,21 +59,27 @@ import Foundation
 class CAX4CCString {
     init(error: OSStatus) {
         // see if it appears to be a 4-char-code
-        var str: [CChar] = Array(count: 16, repeatedValue: 0)
-        str[1] = CChar((error >> 24) & 0xFF)
-        str[2] = CChar((error >> 16) & 0xFF)
-        str[3] = CChar((error >> 8) & 0xFF)
-        str[4] = CChar(error & 0xFF)
-        if isprint(Int32(str[1])) != 0 && isprint(Int32(str[2])) != 0 && isprint(Int32(str[3])) != 0 && isprint(Int32(str[4])) != 0 {
+        var str: [CChar] = Array(repeating: 0, count: 16)
+        if
+            let c1 = CChar(exactly: (error >> 24) & 0xFF),
+            let c2 = CChar(exactly: (error >> 16) & 0xFF),
+            let c3 = CChar(exactly: (error >> 8) & 0xFF),
+            let c4 = CChar(exactly: error & 0xFF),
+            isprint(Int32(c1)) != 0 && isprint(Int32(c2)) != 0 && isprint(Int32(c3)) != 0 && isprint(Int32(c4)) != 0
+        {
             str[0] = CChar("\'")
+            str[1] = c1
+            str[2] = c2
+            str[3] = c3
+            str[4] = c4
             str[5] = CChar("\'")
             str[6] = 0
-            mStr = String.fromCString(str)!
+            mStr = String(cString: str)
         } else if error > -200000 && error < 200000 {
             // no, format it as an integer
             mStr = String(Int32(error))
         } else {
-            mStr = "0x" + String(Int32(error), radix: 16)
+            mStr = "0x" + String(UInt32(bitPattern: error), radix: 16)
         }
     }
     func get() -> String {
@@ -106,15 +112,15 @@ class CAXException: OOPException {
     typealias WarningHandler = (String, OSStatus) -> Void
     
     
-    class func formatError(error: OSStatus) -> String {
+    class func formatError(_ error: OSStatus) -> String {
         return CAX4CCString(error: error).get()
     }
     
-    class func warning(s: String, error: OSStatus) {
+    class func warning(_ s: String, error: OSStatus) {
         sWarningHandler?(s, error)
     }
     
-    class func setWarningHandler(f: WarningHandler) { sWarningHandler = f }
+    class func setWarningHandler(_ f: WarningHandler) { sWarningHandler = f }
     private static var sWarningHandler: WarningHandler? = nil
     
     override var description: String {
@@ -122,22 +128,22 @@ class CAXException: OOPException {
     }
 }
 
-func XExceptionIfError(error: NSError?, _ operation: String) throws {
+func XExceptionIfError(_ error: NSError?, _ operation: String) throws {
     if error != nil && error!.code != 0 {
         throw CAXException(operation: operation, err: OSStatus(error!.code))
     }
 }
-func XFailIfError(error: NSError?, _ operation: String) {
+func XFailIfError(_ error: NSError?, _ operation: String) {
     if error != nil && error!.code != 0 {
         XFailIfError(OSStatus(error!.code), operation)
     }
 }
-func XExceptionIfError(error: OSStatus, _ operation: String) throws {
+func XExceptionIfError(_ error: OSStatus, _ operation: String) throws {
     if error != 0 {
         throw CAXException(operation: operation, err: error)
     }
 }
-func XFailIfError(error: OSStatus, _ operation: String) {
+func XFailIfError(_ error: OSStatus, _ operation: String) {
     if error != 0 {
         fatalError(CAXException(operation: operation, err: error).description)
     }

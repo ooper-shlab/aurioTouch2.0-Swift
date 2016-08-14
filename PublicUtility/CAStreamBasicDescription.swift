@@ -68,10 +68,10 @@ typealias CAStreamBasicDescription = AudioStreamBasicDescription
 extension AudioStreamBasicDescription {
     
     enum CommonPCMFormat: Int {
-        case Other = 0
-        case Float32 = 1
-        case Int16 = 2
-        case Fixed824 = 3
+        case other = 0
+        case float32 = 1
+        case int16 = 2
+        case fixed824 = 3
     }
     
     //	Construction/Destruction
@@ -96,13 +96,13 @@ extension AudioStreamBasicDescription {
         mReserved = 0
         
         switch pcmf {
-        case .Float32:
+        case .float32:
             wordsize = 4
             mFormatFlags |= AudioFormatFlags(kAudioFormatFlagIsFloat)
-        case .Int16:
+        case .int16:
             wordsize = 2
             mFormatFlags |= AudioFormatFlags(kAudioFormatFlagIsSignedInteger)
-        case .Fixed824:
+        case .fixed824:
             wordsize = 4
             mFormatFlags |= AudioFormatFlags(kAudioFormatFlagIsSignedInteger | (24 << kLinearPCMFormatFlagsSampleFractionShift))
         default:
