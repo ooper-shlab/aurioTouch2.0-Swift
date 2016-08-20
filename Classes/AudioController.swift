@@ -79,15 +79,15 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             err = AudioUnitRender(_rioUnit!, ioActionFlags, inTimeStamp, 1, inNumberFrames, ioData)
             
             // filter out the DC component of the signal
-            _dcRejectionFilter?.processInplace(UnsafeMutablePointer(ioPtr[0].mData!), numFrames: inNumberFrames)
+            _dcRejectionFilter?.processInplace(ioPtr[0].mData!.assumingMemoryBound(to: Float32.self), numFrames: inNumberFrames)
             
             // based on the current display mode, copy the required data to the buffer manager
             if _bufferManager.displayMode == .oscilloscopeWaveform {
-                _bufferManager.copyAudioDataToDrawBuffer(UnsafeMutablePointer(ioPtr[0].mData), inNumFrames: Int(inNumberFrames))
+                _bufferManager.copyAudioDataToDrawBuffer(ioPtr[0].mData?.assumingMemoryBound(to: Float32.self), inNumFrames: Int(inNumberFrames))
                 
             } else if _bufferManager.displayMode == .spectrum || _bufferManager.displayMode == .oscilloscopeFFT {
                 if _bufferManager.needsNewFFTData {
-                    _bufferManager.CopyAudioDataToFFTInputBuffer(UnsafeMutablePointer(ioPtr[0].mData!), numFrames: Int(inNumberFrames))
+                    _bufferManager.CopyAudioDataToFFTInputBuffer(ioPtr[0].mData!.assumingMemoryBound(to: Float32.self), numFrames: Int(inNumberFrames))
                 }
             }
             
@@ -306,9 +306,9 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             // Set the render callback on AURemoteIO
             var renderCallback = AURenderCallbackStruct(
                 inputProc: AudioController_RenderCallback,
-                inputProcRefCon: UnsafeMutablePointer(unsafeAddress(of: self))
+                inputProcRefCon: Unmanaged.passUnretained(self).toOpaque()
             )
-            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &renderCallback, sizeofValue(renderCallback).ui), "couldn't set render callback on AURemoteIO")
+            try XExceptionIfError(AudioUnitSetProperty(self._rioUnit!, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Input, 0, &renderCallback, MemoryLayout<AURenderCallbackStruct>.size.ui), "couldn't set render callback on AURemoteIO")
             
             // Initialize the AURemoteIO instance
             try XExceptionIfError(AudioUnitInitialize(self._rioUnit!), "couldn't initialize AURemoteIO instance")

@@ -52,10 +52,15 @@ class FFTHelper {
     
     
     func computeFFT(_ inAudioData: UnsafePointer<Float32>?, outFFTData: UnsafeMutablePointer<Float32>?) {
-        if inAudioData == nil || outFFTData == nil { return }
+        guard
+            let inAudioData = inAudioData,
+            let outFFTData = outFFTData
+        else { return }
         
         //Generate a split complex vector from the real data
-        vDSP_ctoz(UnsafePointer(inAudioData!), 2, &mDspSplitComplex, 1, mFFTLength)
+        inAudioData.withMemoryRebound(to: DSPComplex.self, capacity: Int(mFFTLength)) {inAudioDataPtr in
+            vDSP_ctoz(inAudioDataPtr, 2, &mDspSplitComplex, 1, mFFTLength)
+        }
         
         //Take the fft and scale appropriately
         vDSP_fft_zrip(mSpectrumAnalysis!, &mDspSplitComplex, 1, mLog2N, FFTDirection(kFFTDirection_Forward))
@@ -66,11 +71,11 @@ class FFTHelper {
         mDspSplitComplex.imagp[0] = 0.0
         
         //Convert the fft data to dB
-        vDSP_zvmags(&mDspSplitComplex, 1, outFFTData!, 1, mFFTLength)
+        vDSP_zvmags(&mDspSplitComplex, 1, outFFTData, 1, mFFTLength)
         
         //In order to avoid taking log10 of zero, an adjusting factor is added in to make the minimum value equal -128dB
-        vDSP_vsadd(outFFTData!, 1, &kAdjust0DB, outFFTData!, 1, mFFTLength)
+        vDSP_vsadd(outFFTData, 1, &kAdjust0DB, outFFTData, 1, mFFTLength)
         var one: Float32 = 1
-        vDSP_vdbcon(outFFTData!, 1, &one, outFFTData!, 1, mFFTLength, 0)
+        vDSP_vdbcon(outFFTData, 1, &one, outFFTData, 1, mFFTLength, 0)
     }
 }

@@ -127,10 +127,10 @@ class EAGLView: UIView {
         self.isMultipleTouchEnabled = true
         
         l_fftData = UnsafeMutablePointer.allocate(capacity: audioController.bufferManagerInstance.FFTOutputBufferLength)
-        bzero(l_fftData, size_t(audioController.bufferManagerInstance.FFTOutputBufferLength * sizeof(Float32.self)))
+        bzero(l_fftData, size_t(audioController.bufferManagerInstance.FFTOutputBufferLength * MemoryLayout<Float32>.size))
         
         oscilLine = UnsafeMutablePointer.allocate(capacity: kDefaultDrawSamples * 2)
-        bzero(oscilLine, size_t(kDefaultDrawSamples * 2 * sizeof(GLfloat.self)))
+        bzero(oscilLine, size_t(kDefaultDrawSamples * 2 * MemoryLayout<GLfloat>.size))
         
         animationInterval = 1.0 / 60.0
         
@@ -322,7 +322,7 @@ class EAGLView: UIView {
     
     
     private func clearTextures() {
-        bzero(texBitBuffer, size_t(sizeof(UInt32.self) * 512))
+        bzero(texBitBuffer, size_t(MemoryLayout<UInt32>.size * 512))
         
         var curTex = firstTex
         while curTex != nil {
@@ -360,7 +360,7 @@ class EAGLView: UIView {
         firstTex?.pointee.nextTex = nil
         curTex = firstTex
         
-        bzero(texBitBuffer, size_t(sizeof(UInt32.self) * 512))
+        bzero(texBitBuffer, size_t(MemoryLayout<UInt32>.size * 512))
         
         glBindTexture(GL_TEXTURE_2D.ui, (curTex?.pointee.texName)!)
         glTexParameteri(GL_TEXTURE_2D.ui, GL_TEXTURE_MIN_FILTER.ui, GL_NEAREST)
@@ -754,14 +754,14 @@ class EAGLView: UIView {
         tr.x += RECT.size.width
         br.x += RECT.size.width
         
-        path.moveTo(nil, x: bl.x + cornerRadius, y: bl.y)
-        path.addArc(nil, x1: bl.x, y1: bl.y, x2: bl.x, y2: bl.y + cornerRadius, radius: cornerRadius)
-        path.addLineTo(nil, x: tl.x, y: tl.y - cornerRadius)
-        path.addArc(nil, x1: tl.x, y1: tl.y, x2: tl.x + cornerRadius, y2: tl.y, radius: cornerRadius)
-        path.addLineTo(nil, x: tr.x - cornerRadius, y: tr.y)
-        path.addArc(nil, x1: tr.x, y1: tr.y, x2: tr.x, y2: tr.y - cornerRadius, radius: cornerRadius)
-        path.addLineTo(nil, x: br.x, y: br.y + cornerRadius)
-        path.addArc(nil, x1: br.x, y1: br.y, x2: br.x - cornerRadius, y2: br.y, radius: cornerRadius)
+        path.move(to: CGPoint(x: bl.x + cornerRadius, y: bl.y))
+        path.addArc(tangent1End: CGPoint(x: bl.x, y: bl.y), tangent2End: CGPoint(x: bl.x, y: bl.y + cornerRadius), radius: cornerRadius)
+        path.addLine(to: CGPoint(x: tl.x, y: tl.y - cornerRadius))
+        path.addArc(tangent1End: CGPoint(x: tl.x, y: tl.y), tangent2End: CGPoint(x: tl.x + cornerRadius, y: tl.y), radius: cornerRadius)
+        path.addLine(to: CGPoint(x: tr.x - cornerRadius, y: tr.y))
+        path.addArc(tangent1End: CGPoint(x: tr.x, y: tr.y), tangent2End: CGPoint(x: tr.x, y: tr.y - cornerRadius), radius: cornerRadius)
+        path.addLine(to: CGPoint(x: br.x, y: br.y + cornerRadius))
+        path.addArc(tangent1End: CGPoint(x: br.x, y: br.y), tangent2End: CGPoint(x: br.x - cornerRadius, y: br.y), radius: cornerRadius)
         
         path.closeSubpath()
         
@@ -804,7 +804,7 @@ class EAGLView: UIView {
         spriteContext?.scaleBy(x: 1.0, y: -1.0)
         
         // After you create the context, you can draw the sprite image to the context.
-        spriteContext?.draw(in: CGRect(x: 0.0, y: 0.0, width: imgW.g, height: imgH.g), image: img)
+        spriteContext?.draw(img, in: CGRect(x: 0.0, y: 0.0, width: imgW.g, height: imgH.g))
         // You don't need the context at this point, so you need to release it to avoid memory leaks.
         
         // Use OpenGL ES to generate a name for the texture.

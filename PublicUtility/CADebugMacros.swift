@@ -26,8 +26,8 @@ import CoreAudio
 //	This is a macro that does a sizeof and casts the result to a UInt32. This is useful for all the
 //	places where -wshorten64-32 catches assigning a sizeof expression to a UInt32.
 //	For want of a better place to park this, we'll park it here.
-func SizeOf32<T>(_ X: T) ->UInt32 {return UInt32(strideofValue(X))}
-func SizeOf32<T>(_ X: T.Type) ->UInt32 {return UInt32(strideof(T.self))}
+func SizeOf32<T>(_ X: T) ->UInt32 {return UInt32(MemoryLayout<T>.stride)}
+func SizeOf32<T>(_ X: T.Type) ->UInt32 {return UInt32(MemoryLayout<T>.stride)}
 
 
 func DebugMsg(_ inFormat: String, args: CVarArg...) {}

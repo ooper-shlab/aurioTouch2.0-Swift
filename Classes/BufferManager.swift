@@ -103,8 +103,8 @@ class BufferManager {
     
     func CopyAudioDataToFFTInputBuffer(_ inData: UnsafePointer<Float32>, numFrames: Int) {
         let framesToCopy = min(numFrames, mFFTInputBufferLen - mFFTInputBufferFrameIndex)
-        memcpy(mFFTInputBuffer?.advanced(by: mFFTInputBufferFrameIndex), inData, size_t(framesToCopy * sizeof(Float32.self)))
-        mFFTInputBufferFrameIndex += framesToCopy * sizeof(Float32.self)
+        memcpy(mFFTInputBuffer?.advanced(by: mFFTInputBufferFrameIndex), inData, size_t(framesToCopy * MemoryLayout<Float32>.size))
+        mFFTInputBufferFrameIndex += framesToCopy * MemoryLayout<Float32>.size
         if mFFTInputBufferFrameIndex >= mFFTInputBufferLen {
             OSAtomicIncrement32(&mHasNewFFTData)
             OSAtomicDecrement32(&mNeedsNewFFTData)
