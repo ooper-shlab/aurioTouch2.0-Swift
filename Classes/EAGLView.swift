@@ -172,7 +172,7 @@ class EAGLView: UIView {
         sampleSizeText.text = NSLocalizedString("0000 ms", comment: "")
         sampleSizeText.font = UIFont.boldSystemFont(ofSize: 36.0)
         // Rotate the text view since we want the text to draw top to bottom (when the device is oriented vertically)
-        sampleSizeText.transform = CGAffineTransform(rotationAngle: M_PI_2.g)
+        sampleSizeText.transform = CGAffineTransform(rotationAngle: .pi/2)
         sampleSizeText.backgroundColor = UIColor.clear
         
         // Add the text view as a subview of the overlay BG
