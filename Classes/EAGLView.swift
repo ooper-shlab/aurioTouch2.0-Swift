@@ -29,7 +29,7 @@ class EAGLView: UIView {
     private final let SPECTRUM_BAR_WIDTH = 4
     
     
-    func CLAMP<T: Computable>(_ min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
+    func CLAMP<T: Comparable>(_ min: T, _ x: T, _ max: T) -> T {return x < min ? min : (x > max ? max : x)}
     
     
     // value, a, r, g, b
@@ -202,7 +202,7 @@ class EAGLView: UIView {
         
         glBindFramebufferOES(GL_FRAMEBUFFER_OES.ui, viewFramebuffer)
         glBindRenderbufferOES(GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
-        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, from: self.layer as! EAGLDrawable)
+        context.renderbufferStorage(GL_RENDERBUFFER_OES.l, from: (self.layer as! EAGLDrawable))
         glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES.ui, GL_COLOR_ATTACHMENT0_OES.ui, GL_RENDERBUFFER_OES.ui, viewRenderbuffer)
         
         glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES.ui, GL_RENDERBUFFER_WIDTH_OES.ui, &backingWidth)
@@ -238,7 +238,7 @@ class EAGLView: UIView {
     
     
     func startAnimation() {
-        animationTimer = Timer.scheduledTimer(timeInterval: animationInterval, target: self, selector: #selector(EAGLView.drawView as (EAGLView) -> () -> ()), userInfo: nil, repeats: true)
+        animationTimer = Timer.scheduledTimer(timeInterval: animationInterval, target: self, selector: #selector(self.drawView as () -> ()), userInfo: nil, repeats: true)
         animationStarted = Date.timeIntervalSinceReferenceDate
         audioController.startIOUnit()
     }
@@ -277,7 +277,7 @@ class EAGLView: UIView {
     
     
     // Updates the OpenGL view when the timer fires
-    func drawView() {
+    @objc func drawView() {
         // the NSTimer seems to fire one final time even though it's been invalidated
         // so just make sure and not draw if we're resigning active
         if self.applicationResignedActive { return }
@@ -384,7 +384,7 @@ class EAGLView: UIView {
         
         initted_spectrum = true
         
-        texNames.deallocate(capacity: texCount)
+        texNames.deallocate()
     }
     
     private func drawOscilloscope() {
@@ -553,14 +553,14 @@ class EAGLView: UIView {
         repeat {
             if thisTex?.pointee.nextTex?.pointee.nextTex == nil {
                 firstTex?.pointee.texName = (thisTex?.pointee.nextTex?.pointee.texName)!
-                thisTex?.pointee.nextTex?.deallocate(capacity: 1)
+                thisTex?.pointee.nextTex?.deallocate()
                 thisTex?.pointee.nextTex = nil
             }
             thisTex = thisTex?.pointee.nextTex
         } while thisTex != nil
     }
     
-    private func linearInterp<T: FloatComputable>(_ valA: T, _ valB: T, _ fract: T) -> T {
+    private func linearInterp<T: FloatingPoint>(_ valA: T, _ valB: T, _ fract: T) -> T {
         return valA + ((valB - valA) * fract)
     }
     private func linearInterpUInt8(_ valA: GLfloat, _ valB: GLfloat, _ fract: GLfloat) -> UInt8 {
@@ -824,7 +824,7 @@ class EAGLView: UIView {
         // Enable blending
         glEnable(GL_BLEND.ui)
         
-        spriteData.deallocate(capacity: Int(texH * texW * 4))
+        spriteData.deallocate()
     }
     
     override func touchesEnded(_ touches:Set<UITouch>, with event: UIEvent?) {
@@ -878,14 +878,14 @@ class EAGLView: UIView {
             EAGLContext.setCurrent(nil)
         }
         
-        oscilLine?.deallocate(capacity: kDefaultDrawSamples * 2)
+        oscilLine?.deallocate()
         //###
-        l_fftData?.deallocate(capacity: audioController.bufferManagerInstance.FFTOutputBufferLength)
-        texBitBuffer.deallocate(capacity: 512)
+        l_fftData?.deallocate()
+        texBitBuffer.deallocate()
         var texPtr = firstTex
         while texPtr != nil {
             let nextPtr = texPtr?.pointee.nextTex
-            texPtr?.deallocate(capacity: 1)
+            texPtr?.deallocate()
             texPtr = nextPtr
         }
         

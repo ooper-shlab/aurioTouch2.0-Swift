@@ -18,9 +18,8 @@
 		A16C47120DE37F9E00F4A0B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */; };
 		A16C473F0DE3801700F4A0B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */; };
 		A16C48360DE389CB00F4A0B3 /* oscilloscope.png in Resources */ = {isa = PBXBuildFile; fileRef = A16C48350DE389CB00F4A0B3 /* oscilloscope.png */; };
-		D78F4AE81D60BE7000012A69 /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */; };
+		D71281B52071FDED003CAAFC /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */; };
 		D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */; };
-		D78F4AEA1D60BE7000012A69 /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */; };
 		D78F4AEF1D60BEAF00012A69 /* CABitOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */; };
 		D78F4AF01D60BEAF00012A69 /* CADebugMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEC1D60BEAF00012A69 /* CADebugMacros.swift */; };
 		D78F4AF11D60BEAF00012A69 /* CAStreamBasicDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AED1D60BEAF00012A69 /* CAStreamBasicDescription.swift */; };
@@ -55,7 +54,6 @@
 		A16C47110DE37F9E00F4A0B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A16C48350DE389CB00F4A0B3 /* oscilloscope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oscilloscope.png; sourceTree = "<group>"; };
-		D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericArithmetic.swift; sourceTree = "<group>"; };
 		D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumTypes+Conversion.swift"; sourceTree = "<group>"; };
 		D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPExceptions.swift; sourceTree = "<group>"; };
 		D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
@@ -122,9 +120,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				D79AEF171D60C2F200584688 /* README2.md */,
 				D79AEF181D60C2F200584688 /* LICENSE.txt */,
 				2B869E111D51590F00995BDC /* ReadMe.md */,
+				D79AEF171D60C2F200584688 /* README2.md */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -174,7 +172,6 @@
 		D78F4AE41D60BE7000012A69 /* OOPUtils */ = {
 			isa = PBXGroup;
 			children = (
-				D78F4AE51D60BE7000012A69 /* GenericArithmetic.swift */,
 				D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */,
 				D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */,
 			);
@@ -239,10 +236,10 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0930;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0930;
 					};
 				};
 			};
@@ -297,12 +294,11 @@
 				D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */,
 				D78F4AF21D60BEAF00012A69 /* CAXException.swift in Sources */,
 				D78F4AFD1D60C01A00012A69 /* aurioTouchAppDelegate.swift in Sources */,
-				D78F4AE81D60BE7000012A69 /* GenericArithmetic.swift in Sources */,
+				D71281B52071FDED003CAAFC /* OOPExceptions.swift in Sources */,
 				D78F4AF81D60BF3300012A69 /* FFTHelper.swift in Sources */,
 				D78F4AFF1D60C05500012A69 /* BufferManager.swift in Sources */,
 				D78F4AEF1D60BEAF00012A69 /* CABitOperations.swift in Sources */,
 				D79AEF1C1D60C37E00584688 /* DCRejectionFilter.swift in Sources */,
-				D78F4AEA1D60BE7000012A69 /* OOPExceptions.swift in Sources */,
 				D78F4AF01D60BEAF00012A69 /* CADebugMacros.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,6 +323,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -338,7 +335,8 @@
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos.internal;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -347,6 +345,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = aurioTouch_Prefix.pch;
@@ -356,7 +355,8 @@
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos.internal;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -364,12 +364,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -396,6 +404,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 			};
 			name = Debug;
 		};
@@ -403,12 +412,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -432,6 +449,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 			};
 			name = Release;
 		};

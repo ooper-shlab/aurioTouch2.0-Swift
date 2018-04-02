@@ -22,14 +22,7 @@ func isPowerOfTwo(_ x: UInt32) -> Bool {
 
 // count the leading zeros in a word
 func countLeadingZeroes(_ arg: UInt32) -> UInt32 {
-    var bitMask: Int32 = -0x8000_0000
-    for i in 0..<32 {
-        if UInt32(bitPattern: bitMask) & arg != 0 {
-            return UInt32(i)
-        }
-        bitMask >>= 1
-    }
-    return 32
+    return UInt32(arg.leadingZeroBitCount)
 }
 
 // base 2 log of next power of two greater or equal to x

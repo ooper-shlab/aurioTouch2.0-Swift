@@ -70,12 +70,12 @@ class BufferManager {
     
     deinit {
         for i in 0..<kNumDrawBuffers {
-            drawBuffers[Int(i)]?.deallocate(capacity: mFFTInputBufferLen)
+            drawBuffers[Int(i)]?.deallocate()
             drawBuffers[Int(i)] = nil
         }
-        drawBuffers.deallocate(capacity: kNumDrawBuffers)
+        drawBuffers.deallocate()
         
-        mFFTInputBuffer?.deallocate(capacity: mFFTInputBufferLen)
+        mFFTInputBuffer?.deallocate()
     }
     
     

@@ -46,8 +46,8 @@ class FFTHelper {
     
     deinit {
         vDSP_destroy_fftsetup(mSpectrumAnalysis)
-        mDspSplitComplex.realp.deallocate(capacity: mFFTLength.l)
-        mDspSplitComplex.imagp.deallocate(capacity: mFFTLength.l)
+        mDspSplitComplex.realp.deallocate()
+        mDspSplitComplex.imagp.deallocate()
     }
     
     

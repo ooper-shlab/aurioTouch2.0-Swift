@@ -112,7 +112,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     
-    func handleInterruption(_ notification: Notification) {
+    @objc func handleInterruption(_ notification: Notification) {
 //        do {
             let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
             NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
@@ -139,7 +139,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     }
     
     
-    func handleRouteChange(_ notification: Notification) {
+    @objc func handleRouteChange(_ notification: Notification) {
         let reasonValue = (notification as NSNotification).userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
         let routeDescription = (notification as NSNotification).userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription?
         
@@ -176,7 +176,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         }
     }
     
-    func handleMediaServerReset(_ notification: Notification) {
+    @objc func handleMediaServerReset(_ notification: Notification) {
         NSLog("Media server has reset")
         audioChainIsBeingReconstructed = true
         
@@ -228,19 +228,19 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             
             // add interruption handler
             NotificationCenter.default.addObserver(self,
-                selector: #selector(AudioController.handleInterruption(_:)),
+                selector: #selector(self.handleInterruption(_:)),
                 name: NSNotification.Name.AVAudioSessionInterruption,
                 object: sessionInstance)
             
             // we don't do anything special in the route change notification
             NotificationCenter.default.addObserver(self,
-                selector: #selector(AudioController.handleRouteChange(_:)),
+                selector: #selector(self.handleRouteChange(_:)),
                 name: NSNotification.Name.AVAudioSessionRouteChange,
                 object: sessionInstance)
             
             // if media services are reset, we need to rebuild our audio chain
             NotificationCenter.default.addObserver(self,
-                selector: #selector(AudioController.handleMediaServerReset(_:)),
+                selector: #selector(self.handleMediaServerReset(_:)),
                 name: NSNotification.Name.AVAudioSessionMediaServicesWereReset,
                 object: sessionInstance)
             
