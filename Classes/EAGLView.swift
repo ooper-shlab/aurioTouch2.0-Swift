@@ -698,7 +698,7 @@ class EAGLView: UIView {
         {
             pinchEvent = event
             let t = Array(eventTouches)
-            lastPinchDist = fabs(t[0].location(in: self).x - t[1].location(in: self).x)
+            lastPinchDist = abs(t[0].location(in: self).x - t[1].location(in: self).x)
             
             let hwSampleRate = audioController.sessionSampleRate
             let bufferManager = audioController.bufferManagerInstance
@@ -716,7 +716,7 @@ class EAGLView: UIView {
             var thisPinchDist: CGFloat
             var pinchDiff: CGFloat
             let t = Array(eventTouches)
-            thisPinchDist = fabs(t[0].location(in: self).x - t[1].location(in: self).x)
+            thisPinchDist = abs(t[0].location(in: self).x - t[1].location(in: self).x)
             
             // Find out how far we traveled since the last event
             pinchDiff = thisPinchDist - lastPinchDist

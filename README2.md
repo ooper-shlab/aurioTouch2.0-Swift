@@ -13,7 +13,7 @@ You should not contact to Apple or SHLab(jp) about any faults caused by my trans
 ===========================================================================
 BUILD REQUIREMENTS:
 
-Xcode 9.3
+Xcode 10/Swift 4.2
 
 ===========================================================================
 Files under PublicUtility are not fully translated. Their license terms are kept there just to indicate the original files.

@@ -115,13 +115,13 @@ class AudioController: NSObject, AURenderCallbackDelegate {
     @objc func handleInterruption(_ notification: Notification) {
 //        do {
             let theInterruptionType = (notification as NSNotification).userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
-            NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSessionInterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
+            NSLog("Session interrupted > --- %@ ---\n", theInterruptionType == AVAudioSession.InterruptionType.began.rawValue ? "Begin Interruption" : "End Interruption")
             
-            if theInterruptionType == AVAudioSessionInterruptionType.began.rawValue {
+            if theInterruptionType == AVAudioSession.InterruptionType.began.rawValue {
                 self.stopIOUnit()
             }
             
-            if theInterruptionType == AVAudioSessionInterruptionType.ended.rawValue {
+            if theInterruptionType == AVAudioSession.InterruptionType.ended.rawValue {
                 // make sure to activate the session
                 do {
                     try AVAudioSession.sharedInstance().setActive(true)
@@ -144,7 +144,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
         let routeDescription = (notification as NSNotification).userInfo![AVAudioSessionRouteChangePreviousRouteKey] as! AVAudioSessionRouteDescription?
         
         NSLog("Route change:")
-        if let reason = AVAudioSessionRouteChangeReason(rawValue: reasonValue) {
+        if let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) {
             switch reason {
             case .newDeviceAvailable:
                 NSLog("     NewDeviceAvailable")
@@ -152,7 +152,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 NSLog("     OldDeviceUnavailable")
             case .categoryChange:
                 NSLog("     CategoryChange")
-                NSLog(" New Category: %@", AVAudioSession.sharedInstance().category)
+                NSLog(" New Category: %@", AVAudioSession.sharedInstance().category.rawValue)
             case .override:
                 NSLog("     Override")
             case .wakeFromSleep:
@@ -200,7 +200,12 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             
             // we are going to play and record so we pick that category
             do {
-                try sessionInstance.setCategory(AVAudioSessionCategoryPlayAndRecord)
+                if #available(iOS 10.0, *) {
+                    try sessionInstance.setCategory(.playAndRecord, mode: .default)
+                } else {
+//                    try sessionInstance.setCategory(.playAndRecord)
+                    try AVAudioSessionPatch.setSession(sessionInstance, category: .playAndRecord, with: [])
+                }
             } catch let error as NSError {
                 try XExceptionIfError(error, "couldn't set session's audio category")
             } catch {
@@ -229,19 +234,19 @@ class AudioController: NSObject, AURenderCallbackDelegate {
             // add interruption handler
             NotificationCenter.default.addObserver(self,
                 selector: #selector(self.handleInterruption(_:)),
-                name: NSNotification.Name.AVAudioSessionInterruption,
+                name: AVAudioSession.interruptionNotification,
                 object: sessionInstance)
             
             // we don't do anything special in the route change notification
             NotificationCenter.default.addObserver(self,
                 selector: #selector(self.handleRouteChange(_:)),
-                name: NSNotification.Name.AVAudioSessionRouteChange,
+                name: AVAudioSession.routeChangeNotification,
                 object: sessionInstance)
             
             // if media services are reset, we need to rebuild our audio chain
             NotificationCenter.default.addObserver(self,
                 selector: #selector(self.handleMediaServerReset(_:)),
-                name: NSNotification.Name.AVAudioSessionMediaServicesWereReset,
+                name: AVAudioSession.mediaServicesWereResetNotification,
                 object: sessionInstance)
             
             do {
