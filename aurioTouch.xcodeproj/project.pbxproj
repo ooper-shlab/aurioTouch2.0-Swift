@@ -19,7 +19,6 @@
 		A16C473F0DE3801700F4A0B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */; };
 		A16C48360DE389CB00F4A0B3 /* oscilloscope.png in Resources */ = {isa = PBXBuildFile; fileRef = A16C48350DE389CB00F4A0B3 /* oscilloscope.png */; };
 		D71281B52071FDED003CAAFC /* OOPExceptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */; };
-		D77384BA2179282E00F17C72 /* AVAudioSessionPatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D77384B92179282E00F17C72 /* AVAudioSessionPatch.m */; };
 		D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */; };
 		D78F4AEF1D60BEAF00012A69 /* CABitOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */; };
 		D78F4AF01D60BEAF00012A69 /* CADebugMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78F4AEC1D60BEAF00012A69 /* CADebugMacros.swift */; };
@@ -55,9 +54,6 @@
 		A16C473E0DE3801700F4A0B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A16C48350DE389CB00F4A0B3 /* oscilloscope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oscilloscope.png; sourceTree = "<group>"; };
 		D77384B62179205100F17C72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = ../../Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		D77384B72179282D00F17C72 /* aurioTouch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aurioTouch-Bridging-Header.h"; sourceTree = "<group>"; };
-		D77384B82179282E00F17C72 /* AVAudioSessionPatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVAudioSessionPatch.h; sourceTree = "<group>"; };
-		D77384B92179282E00F17C72 /* AVAudioSessionPatch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVAudioSessionPatch.m; sourceTree = "<group>"; };
 		D78F4AE61D60BE7000012A69 /* NumTypes+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumTypes+Conversion.swift"; sourceTree = "<group>"; };
 		D78F4AE71D60BE7000012A69 /* OOPExceptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPExceptions.swift; sourceTree = "<group>"; };
 		D78F4AEB1D60BEAF00012A69 /* CABitOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CABitOperations.swift; sourceTree = "<group>"; };
@@ -141,9 +137,6 @@
 			children = (
 				F74ADD0E0DDA24AA0046BEC2 /* PublicUtility */,
 				D78F4AE41D60BE7000012A69 /* OOPUtils */,
-				D77384B82179282E00F17C72 /* AVAudioSessionPatch.h */,
-				D77384B92179282E00F17C72 /* AVAudioSessionPatch.m */,
-				D77384B72179282D00F17C72 /* aurioTouch-Bridging-Header.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -246,21 +239,20 @@
 				LastUpgradeCheck = 0930;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "aurioTouch" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
 				en,
 				Base,
+				de,
+				ja,
+				fr,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -297,7 +289,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D78F4AFE1D60C01A00012A69 /* EAGLView.swift in Sources */,
-				D77384BA2179282E00F17C72 /* AVAudioSessionPatch.m in Sources */,
 				D78F4AF11D60BEAF00012A69 /* CAStreamBasicDescription.swift in Sources */,
 				D78F4AFC1D60C01A00012A69 /* AudioController.swift in Sources */,
 				D78F4AE91D60BE7000012A69 /* NumTypes+Conversion.swift in Sources */,
@@ -344,9 +335,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.sample.aurioTouch;
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "aurioTouch-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -365,9 +355,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.sample.aurioTouch;
 				PRODUCT_NAME = aurioTouch;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "aurioTouch-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

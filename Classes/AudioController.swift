@@ -163,6 +163,8 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 NSLog("     RouteConfigurationChange")
             case .unknown:
                 NSLog("     Unknown")
+            @unknown default:
+                NSLog("     UnknownDefault(%zu)", reasonValue)
             }
         } else {
             NSLog("     ReasonUnknown(%zu)", reasonValue)
@@ -203,8 +205,7 @@ class AudioController: NSObject, AURenderCallbackDelegate {
                 if #available(iOS 10.0, *) {
                     try sessionInstance.setCategory(.playAndRecord, mode: .default)
                 } else {
-//                    try sessionInstance.setCategory(.playAndRecord)
-                    try AVAudioSessionPatch.setSession(sessionInstance, category: .playAndRecord, with: [])
+                    try sessionInstance.setCategory(.playAndRecord)
                 }
             } catch let error as NSError {
                 try XExceptionIfError(error, "couldn't set session's audio category")
